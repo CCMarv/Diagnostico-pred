@@ -1,4 +1,5 @@
-# diabetes-ia-mx — Documento de Diseño y Progreso del Proyecto
+# Diasgnostico-pred
+ — Documento de Diseño y Progreso del Proyecto
 
 > **Versión del sistema:** 0.1.0  
 > **Dataset fuente:** CDC BRFSS 2015 — `diabetes_binary_health_indicators_BRFSS2015.csv`  
