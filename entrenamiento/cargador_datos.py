@@ -56,7 +56,7 @@ class CargadorDatos:
         distribucion = dataframe[columna_objetivo].value_counts(normalize=True).sort_index()
         clase_0 = float(distribucion.get(0, 0.0))
         clase_1 = float(distribucion.get(1, 0.0))
-        ratio = float(clase_0 / clase_1) if clase_1 else float("inf")
+        ratio = float(clase_0 / clase_1) if clase_1 > 0 else float("inf")
 
         return {
             "proporcion_clase_0": clase_0,

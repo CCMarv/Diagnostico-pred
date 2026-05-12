@@ -69,7 +69,7 @@ class ComparadorModelos:
             },
             scoring="roc_auc",
             cv=cv,
-            n_jobs=None,
+            n_jobs=-1,
             refit=True,
         )
         grid.fit(x_entrenamiento, y_entrenamiento)
