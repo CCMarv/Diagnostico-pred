@@ -63,9 +63,9 @@ def descargar_y_persistir(ruta_destino: Path | None = None) -> Path:
     dataframe = pd.concat([caracteristicas, objetivos], axis=1)
     _validar_columnas(dataframe, (*COLUMNAS_CDC, COLUMNA_OBJETIVO))
 
-    if len(dataframe) <= _MIN_FILAS_VALIDAS:
+    if len(dataframe) < _MIN_FILAS_VALIDAS:
         raise ValueError(
-            f"El dataset descargado tiene {len(dataframe)} filas; se esperaban más de {_MIN_FILAS_VALIDAS}."
+            f"El dataset descargado tiene {len(dataframe)} filas; se esperaban al menos {_MIN_FILAS_VALIDAS}."
         )
 
     ruta_salida.parent.mkdir(parents=True, exist_ok=True)
