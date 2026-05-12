@@ -54,7 +54,7 @@ class ConstructorPreprocesador:
         binarias = Pipeline(
             steps=[
                 ("imputer", SimpleImputer(strategy="most_frequent")),
-                ("passthrough", "passthrough"),
+                ("no_scaling", "passthrough"),
             ]
         )
         ordinales = Pipeline(
@@ -103,7 +103,7 @@ class ConstructorPreprocesador:
         binarias = Pipeline(
             steps=[
                 ("imputer", SimpleImputer(strategy="most_frequent")),
-                ("passthrough", "passthrough"),
+                ("no_scaling", "passthrough"),
             ]
         )
         ordinales = Pipeline(

@@ -7,6 +7,7 @@ import logging
 from pathlib import Path
 
 import joblib
+import numpy as np
 from sklearn.model_selection import train_test_split
 
 from config import (
@@ -28,8 +29,8 @@ def _extraer_probabilidad_clase_1(modelo, x) -> list[float]:
         probabilidades = modelo.predict_proba(x)
         return [float(fila[-1]) for fila in probabilidades]
     if hasattr(modelo, "decision_function"):
-        decision = modelo.decision_function(x)
-        return [float(1 / (1 + pow(2.718281828, -valor))) for valor in decision]
+        decision = np.asarray(modelo.decision_function(x), dtype=float)
+        return [float(valor) for valor in (1 / (1 + np.exp(-decision)))]
     pred = modelo.predict(x)
     return [float(valor) for valor in pred]
 

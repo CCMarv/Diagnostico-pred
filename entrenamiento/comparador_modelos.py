@@ -4,10 +4,10 @@ from dataclasses import dataclass
 from typing import Final
 
 import numpy as np
+import pandas as pd
 from sklearn.base import clone
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.cluster import KMeans
-from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import GridSearchCV, StratifiedKFold, cross_val_score
 from sklearn.neural_network import MLPClassifier
 from sklearn.tree import DecisionTreeClassifier
@@ -77,10 +77,8 @@ class ComparadorModelos:
 
     def entrenar_clasificacion(
         self,
-        x_entrenamiento: np.ndarray,
-        y_entrenamiento: np.ndarray,
-        x_prueba: np.ndarray | None = None,
-        y_prueba: np.ndarray | None = None,
+        x_entrenamiento: pd.DataFrame,
+        y_entrenamiento: pd.Series,
         modelos_a_entrenar: list[str] | None = None,
     ) -> list[ResultadoModelo]:
         modelos_objetivo = modelos_a_entrenar or list(MODELOS_SUPERVISADOS)
