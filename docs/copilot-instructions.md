@@ -39,14 +39,14 @@ ni `config.py` salvo para agregar constantes nuevas compatibles.**
 
 ---
 
-## ESTADO REAL DE AVANCE (actualizado: 2026-05-12)
+## ESTADO REAL DE AVANCE (actualizado: 2026-05-14)
 
 ### Sprint 2
 
 | Ticket | Estado | Evidencia actual |
 |---|---|---|
 | S2-01 Descargar dataset | ✅ Completado | Dataset descargado en `datos/brutos/` usando `entrenamiento/descargador_dataset.py`  |
-| S2-02 Notebook EDA | ⬜ Pendiente | No existe `notebooks/01_eda_regionalizado.ipynb` |
+| S2-02 Notebook EDA | ⬜ Parcial | No existe `notebooks/01_eda_regionalizado.ipynb` |
 | S2-03 Preprocesador | ✅ Completado | `entrenamiento/preprocesador.py` implementado |
 | S2-04 Modelos supervisados | ✅ Completado | `ComparadorModelos` ya incluye `svm`, `arbol`, `gbm`, `mlp` |
 | S2-05 Evaluador clínico | ✅ Completado | `entrenamiento/evaluador.py` implementado |
