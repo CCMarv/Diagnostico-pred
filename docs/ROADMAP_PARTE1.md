@@ -278,7 +278,7 @@ class EvaluadorClinico:
 
 | ID | Tarea | Responsable sugerido | Prioridad | Dependencia | Estado actual | Hecho hasta ahora |
 |---|---|---|---|---|---|---|
-| S2-01 | Descargar dataset CDC BRFSS 2015 vía UCI/Kaggle → `datos/brutos/` | DevOps / ML Eng | 🔴 CRÍTICA | Ninguna | 🟡 PARCIAL | Implementado `entrenamiento/descargador_dataset.py` + dependencia `ucimlrepo` + pruebas; falta persistir dataset real en `datos/brutos/` dentro del repo |
+| S2-01 | Descargar dataset CDC BRFSS 2015 vía UCI/Kaggle → `datos/brutos/` | DevOps / ML Eng | 🔴 CRÍTICA | Ninguna | ✅ COMPLETADO | Implementado `entrenamiento/descargador_dataset.py` + dependencia `ucimlrepo` + pruebas; dataset real descargado en `datos/brutos/` |
 | S2-02 | Crear `notebooks/01_eda_regionalizado.ipynb` con estructura de bloques 1–6 | Data Scientist | 🔴 CRÍTICA | S2-01 | ⬜ PENDIENTE | Aún no existe carpeta `notebooks/` ni notebook en el repositorio |
 | S2-03 | Implementar `entrenamiento/preprocesador.py` con ColumnTransformer | ML Engineer | 🔴 CRÍTICA | S2-01 | ✅ COMPLETADO | `ConstructorPreprocesador` creado con continuas/binarias/ordinales y soporte de fenotipo |
 | S2-04 | Extender `ComparadorModelos` con SVM, GBM, MLP usando Pipeline sklearn | ML Engineer | 🔴 CRÍTICA | S2-03 | ✅ COMPLETADO | `ComparadorModelos` ya entrena `svm`, `arbol`, `gbm`, `mlp` con CV ROC-AUC |
