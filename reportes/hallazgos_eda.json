@@ -1,0 +1,48 @@
+{
+  "dataset": {
+    "n_filas": 253680,
+    "n_columnas": 22,
+    "n_nulos": 0,
+    "prevalencia_clase1": 0.1393,
+    "ratio_desbalance": 6.177
+  },
+  "preprocesamiento": {
+    "imputacion_requerida": false,
+    "estrategia_desbalance": "class_weight_balanced",
+    "scaler_continuas": "StandardScaler",
+    "encoder_ordinales": "OrdinalEncoder_con_orden_explicito",
+    "binarias": "passthrough"
+  },
+  "top5_predictores_spearman": [
+    "GenHlth",
+    "HighBP",
+    "BMI",
+    "DiffWalk",
+    "HighChol"
+  ],
+  "sesgos_criticos_cdc_mexico": [
+    {
+      "variable": "Smoker",
+      "sesgo_pct": 151.8
+    },
+    {
+      "variable": "Veggies",
+      "sesgo_pct": 138.7
+    },
+    {
+      "variable": "HighChol",
+      "sesgo_pct": 116.4
+    },
+    {
+      "variable": "Fruits",
+      "sesgo_pct": 51.0
+    },
+    {
+      "variable": "HighBP",
+      "sesgo_pct": 42.5
+    }
+  ],
+  "umbral_decision_recomendado_mx": 0.25,
+  "bmi_media_cdc": 28.38,
+  "bmi_media_mexico_referencia": 29.2
+}
