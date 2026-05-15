@@ -32,10 +32,14 @@ class ComparadorModelos:
 
     def __init__(self) -> None:
         self._preprocesador = ConstructorPreprocesador()
+        # Tarea de modelado: mantener aquí el catálogo de estimadores, sus grids y sus parámetros de desbalance.
+        # Cada modelo debe entrar como Pipeline completo para reutilizar el preprocesamiento y evitar leakage.
         self._catalogo_modelos = {
             "svm": {
                 "estimador": SVC(
                     kernel="rbf",
+                    C=1.0,
+                    gamma="scale",
                     probability=True,
                     class_weight="balanced",
                     random_state=SEMILLA_ALEATORIA,
@@ -48,6 +52,7 @@ class ComparadorModelos:
             "arbol": {
                 "estimador": DecisionTreeClassifier(
                     max_depth=5,
+                    ccp_alpha=0.0,
                     class_weight="balanced",
                     random_state=SEMILLA_ALEATORIA,
                 ),
@@ -82,6 +87,8 @@ class ComparadorModelos:
         y_entrenamiento: pd.Series,
         modelos_a_entrenar: list[str] | None = None,
     ) -> list[ResultadoModelo]:
+        # Tarea de modelado: usar esta ruta para entrenar, comparar y seleccionar SVM, árbol, GBM y MLP.
+        # Si se agregan nuevos modelos, deben registrarse en el catálogo anterior y validarse con ROC-AUC.
         modelos_objetivo = modelos_a_entrenar or list(MODELOS_SUPERVISADOS)
         desconocidos = [nombre for nombre in modelos_objetivo if nombre not in self._catalogo_modelos]
         if desconocidos:
@@ -124,6 +131,7 @@ class ComparadorModelos:
         return resultados
 
     def entrenar_clustering(self, x_entrenamiento: np.ndarray, n_clusters: int = CLUSTERS_POR_DEFECTO) -> ResultadoModelo:
+        # Tarea separada: si el clustering se reencuadra como fenotipado clínico, esta sección debe reflejar esa lógica.
         modelo = KMeans(n_clusters=n_clusters, random_state=SEMILLA_ALEATORIA, n_init="auto")
         modelo.fit(x_entrenamiento)
         inercia = float(modelo.inertia_)

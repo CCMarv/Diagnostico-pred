@@ -45,6 +45,8 @@ class ConstructorPreprocesador:
         Propósito:
         Crear el ColumnTransformer base para columnas CDC.
         """
+        # Tarea de preprocesamiento: mantener aquí la separación entre continuas, binarias y ordinales.
+        # Las continuas deben imputarse y escalarse; las binarias no deben escalarse; las ordinales deben respetar su orden.
         continuas = Pipeline(
             steps=[
                 ("imputer", SimpleImputer(strategy="median")),
@@ -82,7 +84,10 @@ class ConstructorPreprocesador:
         Propósito:
         Retornar pipeline completo serializable (preprocesador + clasificador).
         """
+        # Tarea de integración: este Pipeline es el contrato que consumirá el entrenamiento y la inferencia.
+        # Aquí no se debe ajustar nada fuera del Pipeline para evitar data leakage.
         return Pipeline(
+            memory=None,
             steps=[
                 ("preprocesador", self.construir()),
                 ("clasificador", clasificador),
@@ -94,6 +99,8 @@ class ConstructorPreprocesador:
         Propósito:
         Retornar pipeline que añade la columna ordinal de fenotipo.
         """
+        # Tarea adicional: usar esta variante solo si el fenotipo clínico se incorpora al entrenamiento.
+        # Si no se usa, la columna adicional no debe afectar el contrato del pipeline base.
         continuas = Pipeline(
             steps=[
                 ("imputer", SimpleImputer(strategy="median")),
@@ -133,6 +140,7 @@ class ConstructorPreprocesador:
             remainder="drop",
         )
         return Pipeline(
+            memory=None,
             steps=[
                 ("preprocesador", preprocesador),
                 ("clasificador", clasificador),
