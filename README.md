@@ -21,7 +21,7 @@ Este proyecto se mantiene de forma colaborativa y está dirigido a estudiantes u
 - **Documentación:** escribir descripciones cortas, en español claro, explicando objetivo, entrada y salida.
 - **Código:** preferir docstrings breves en funciones públicas y nombres descriptivos en español.
 - **Notas técnicas:** cuando una decisión no sea obvia, documentar el motivo (no solo el resultado).
-- **Cambios de equipo:** al modificar un módulo, actualizar la sección correspondiente en `README.md` o `PROYECTO.md` si cambia su comportamiento.
+- **Cambios de equipo:** al modificar un módulo, actualizar la sección correspondiente en `README.md` o en `PROYECTO.md` (documento de diseño en la raíz) si cambia su comportamiento.
 
 ---
 
