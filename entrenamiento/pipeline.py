@@ -25,6 +25,7 @@ _LOG = logging.getLogger(__name__)
 
 
 def _extraer_probabilidad_clase_1(modelo, x) -> list[float]:
+    """Normaliza salida del modelo a probabilidades de clase positiva."""
     if hasattr(modelo, "predict_proba"):
         probabilidades = modelo.predict_proba(x)
         return [float(fila[-1]) for fila in probabilidades]
@@ -36,6 +37,7 @@ def _extraer_probabilidad_clase_1(modelo, x) -> list[float]:
 
 
 def _resolver_modelos_a_entrenar(modelos_cli: list[str] | None) -> list[str]:
+    """Resuelve la lista final de modelos supervisados a entrenar."""
     if modelos_cli is None:
         return list(MODELOS_SUPERVISADOS)
     return [modelo.strip() for modelo in modelos_cli if modelo.strip()]
@@ -49,7 +51,13 @@ def ejecutar_pipeline(
     n_clusters: int = CLUSTERS_POR_DEFECTO,
     modelos_a_entrenar: list[str] | None = None,
 ) -> dict[str, float | str | dict]:
-    """Orquesta entrenamiento mínimo para clasificación o clustering."""
+    """
+    Orquesta el flujo completo de entrenamiento.
+
+    Nota para estudiantes:
+    - `clasificacion` entrena y compara modelos supervisados.
+    - `clustering` ejecuta K-Means sin variable objetivo.
+    """
     cargador = CargadorDatos()
     comparador = ComparadorModelos()
 
@@ -132,6 +140,7 @@ def ejecutar_pipeline(
 
 
 def construir_parser() -> argparse.ArgumentParser:
+    """Construye el parser CLI para ejecutar el pipeline por terminal."""
     parser = argparse.ArgumentParser(description="Pipeline de entrenamiento Diasgnostico-pred")
     parser.add_argument("--modo", choices=["clasificacion", "clustering"], default="clasificacion")
     parser.add_argument("--dataset", type=Path, default=None)
@@ -148,6 +157,7 @@ def construir_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    """Punto de entrada CLI para entrenamiento reproducible."""
     args = construir_parser().parse_args()
     modelos = args.modelos.split(",") if args.modelos else None
     ejecutar_pipeline(
