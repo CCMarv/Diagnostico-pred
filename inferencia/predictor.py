@@ -30,6 +30,7 @@ class PredictorDiabetes:
         if not self.ruta_modelo.exists():
             self._modelo = None
             return False
+        # El archivo guardado ya incluye preprocesamiento + clasificador dentro del Pipeline.
         self._modelo = joblib.load(self.ruta_modelo)
         return True
 
@@ -54,14 +55,17 @@ class PredictorDiabetes:
         if faltantes:
             raise ValueError(f"Faltan columnas CDC en la entrada: {faltantes}")
 
+        # Se reordena la fila para respetar el contrato exacto de columnas esperado por el pipeline.
         entrada_ordenada = entrada[list(COLUMNAS_CDC)]
         inicio = time.perf_counter()
 
         if hasattr(self._modelo, "predict_proba"):
+            # La SVM del proyecto llega por esta ruta y devuelve probabilidad directamente.
             proba_raw = self._modelo.predict_proba(entrada_ordenada)
             probabilidad = float(proba_raw[0][-1])
             clase = int(probabilidad >= 0.5)
         else:
+            # Fallback para modelos que solo exponen clase o función de decisión.
             clase = int(self._modelo.predict(entrada_ordenada)[0])
             probabilidad = float(clase)
 

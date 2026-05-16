@@ -27,9 +27,11 @@ _LOG = logging.getLogger(__name__)
 def _extraer_probabilidad_clase_1(modelo, x) -> list[float]:
     """Normaliza salida del modelo a probabilidades de clase positiva (riesgo de diabetes)."""
     if hasattr(modelo, "predict_proba"):
+        # Ruta ideal: la SVM del proyecto ya se entrena con probability=True, así que esta rama debe ser la habitual.
         probabilidades = modelo.predict_proba(x)
         return [float(fila[-1]) for fila in probabilidades]
     if hasattr(modelo, "decision_function"):
+        # Si el estimador no expone probabilidades, la decisión se aproxima con una sigmoide.
         decision = np.asarray(modelo.decision_function(x), dtype=float)
         return [float(valor) for valor in (1 / (1 + np.exp(-decision)))]
     pred = modelo.predict(x)
@@ -63,10 +65,12 @@ def ejecutar_pipeline(
 
     if modo == "clasificacion":
         evaluador = EvaluadorClinico()
+        # Se carga el dataset ya con objetivo para poder comparar modelos con la misma partición.
         x, y = cargador.cargar_con_objetivo(ruta_dataset=ruta_dataset)
         desbalance = cargador.detectar_desbalance(y)
         _LOG.info("Desbalance detectado: %s", desbalance)
 
+        # La separación estratificada preserva la proporción de clases en train y test.
         x_ent, x_pru, y_ent, y_pru = train_test_split(
             x,
             y,
@@ -84,6 +88,7 @@ def ejecutar_pipeline(
         evaluaciones = []
         for resultado in resultados:
             y_prob = _extraer_probabilidad_clase_1(resultado.modelo, x_pru)
+            # Cada modelo se evalúa sobre el mismo conjunto de prueba para comparar ROC-AUC de forma justa.
             evaluacion = evaluador.calcular_metricas(
                 y_verdadero=y_pru.to_numpy(),
                 y_prob=y_prob,
@@ -91,7 +96,7 @@ def ejecutar_pipeline(
             )
             evaluaciones.append((resultado, evaluacion))
 
-        mejor_resultado, mejor_evaluacion = max(evaluaciones, key=lambda item: item[1].roc_auc)
+        mejor_resultado, _ = max(evaluaciones, key=lambda item: item[1].roc_auc)
         evaluador.graficar_curvas(y_pru.to_numpy(), _extraer_probabilidad_clase_1(mejor_resultado.modelo, x_pru), mejor_resultado.nombre)
         evaluador.graficar_curva_calibracion(
             y_pru.to_numpy(),
@@ -105,6 +110,7 @@ def ejecutar_pipeline(
 
         ruta_modelo.parent.mkdir(parents=True, exist_ok=True)
         ruta_reporte.parent.mkdir(parents=True, exist_ok=True)
+        # Se guarda el pipeline completo, no solo el clasificador, para que inferencia reciba el mismo preprocesamiento.
         joblib.dump(mejor_resultado.modelo, ruta_versionada)
         joblib.dump(mejor_resultado.modelo, ruta_modelo)
 

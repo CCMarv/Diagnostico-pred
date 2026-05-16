@@ -32,8 +32,8 @@ class ComparadorModelos:
 
     def __init__(self) -> None:
         self._preprocesador = ConstructorPreprocesador()
-        # Tarea de modelado: mantener aquí el catálogo de estimadores, sus grids y sus parámetros de desbalance.
-        # Cada modelo debe entrar como Pipeline completo para reutilizar el preprocesamiento y evitar leakage.
+        # Catálogo central: aquí se define qué modelos compiten y qué hiperparámetros se exploran.
+        # La SVM se registra con GridSearch porque es el modelo del que más depende el ajuste fino.
         self._catalogo_modelos = {
             "svm": {
                 "estimador": SVC(
@@ -87,8 +87,8 @@ class ComparadorModelos:
         y_entrenamiento: pd.Series,
         modelos_a_entrenar: list[str] | None = None,
     ) -> list[ResultadoModelo]:
-        # Tarea de modelado: usar esta ruta para entrenar, comparar y seleccionar SVM, árbol, GBM y MLP.
-        # Si se agregan nuevos modelos, deben registrarse en el catálogo anterior y validarse con ROC-AUC.
+        # Esta ruta compara todos los supervisados con la misma métrica para que la selección sea justa.
+        # El Pipeline se construye por modelo para mantener el preprocesamiento dentro del entrenamiento.
         modelos_objetivo = modelos_a_entrenar or list(MODELOS_SUPERVISADOS)
         desconocidos = [nombre for nombre in modelos_objetivo if nombre not in self._catalogo_modelos]
         if desconocidos:
@@ -104,6 +104,7 @@ class ComparadorModelos:
             grid = descriptor["grid"]
 
             if grid:
+                # La SVM usa búsqueda explícita de hiperparámetros porque su rendimiento depende mucho de C y gamma.
                 ajuste = GridSearchCV(
                     estimator=pipeline,
                     param_grid=grid,
@@ -117,6 +118,7 @@ class ComparadorModelos:
                 )
                 continue
 
+            # Cuando no hay grid, se evalúa por validación cruzada y luego se deja el Pipeline ajustado.
             puntajes = cross_val_score(
                 pipeline,
                 x_entrenamiento,

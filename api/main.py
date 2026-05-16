@@ -27,6 +27,7 @@ logger.info("Arrancando API de Diagnóstico Predictivo...")
 async def lifespan(app: FastAPI):
     """Propósito: inicializar predictor al arrancar; firma: (app: FastAPI) -> async context manager."""
     predictor = PredictorDiabetes()
+    # La API carga el artefacto una sola vez al inicio para evitar hacerlo en cada request.
     predictor.cargar_modelo()
     app.state.predictor = predictor
     yield
@@ -57,6 +58,7 @@ def crear_app() -> FastAPI:
         modelo_cargado = False
         if ruta_modelo.exists():
             try:
+                # Se valida existencia y tamaño para diferenciar un archivo real de un artefacto vacío o corrupto.
                 modelo_cargado = ruta_modelo.stat().st_size > 0
             except OSError as exc:
                 logger.warning(
@@ -94,6 +96,7 @@ def crear_app() -> FastAPI:
             raise HTTPException(status_code=500, detail="Error interno al ejecutar predicción.") from exc
 
         probabilidad = float(resultado["probabilidad"])
+        # La probabilidad se traduce en una categoría de riesgo para que la respuesta sea interpretable clínicamente.
         if probabilidad < UMBRAL_RIESGO_BAJO:
             categoria = "bajo"
         elif probabilidad < UMBRAL_RIESGO_ALTO:
@@ -102,6 +105,7 @@ def crear_app() -> FastAPI:
             categoria = "alto"
 
         advertencia = None
+        # Se marca incertidumbre cuando la salida cae cerca de los umbrales de decisión.
         cerca_bajo = abs(probabilidad - UMBRAL_RIESGO_BAJO) <= MARGEN_INCERTIDUMBRE
         cerca_alto = abs(probabilidad - UMBRAL_RIESGO_ALTO) <= MARGEN_INCERTIDUMBRE
         if cerca_bajo or cerca_alto:
