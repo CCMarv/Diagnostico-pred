@@ -1,4 +1,4 @@
-# diasgnostico-pred 🩺
+# diasgnostico-pred 
 
 Sistema modular de predicción de riesgo de diabetes tipo 2 mediante API REST. Entrena y despliega modelos de machine learning supervisado sobre el dataset CDC BRFSS 2015, con contextualización epidemiológica para población mexicana (IMSS / ENSANUT 2022).
 
