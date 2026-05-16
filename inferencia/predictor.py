@@ -11,14 +11,22 @@ from config import COLUMNAS_CDC, RUTA_MODELO_FINAL, VERSION_SISTEMA
 
 
 class PredictorDiabetes:
-    """Encapsula carga y predicción del modelo de riesgo de diabetes."""
+    """
+    Encapsula la carga del modelo y la predicción de riesgo de diabetes.
+
+    Notas para colaboradores:
+    - Esta clase solo se encarga de inferencia.
+    - No entrena modelos ni modifica artefactos de entrenamiento.
+    """
 
     def __init__(self, ruta_modelo: Path | None = None, version: str = VERSION_SISTEMA) -> None:
+        """Inicializa ruta del modelo, versión y estado interno."""
         self.ruta_modelo = ruta_modelo or RUTA_MODELO_FINAL
         self.version = version
         self._modelo: Any | None = None
 
     def cargar_modelo(self) -> bool:
+        """Carga el artefacto `.joblib` si existe y devuelve si quedó disponible."""
         if not self.ruta_modelo.exists():
             self._modelo = None
             return False
@@ -26,9 +34,17 @@ class PredictorDiabetes:
         return True
 
     def esta_listo(self) -> bool:
+        """Indica si hay un modelo cargado y listo para predecir."""
         return self._modelo is not None
 
     def predecir(self, entrada: pd.DataFrame) -> dict[str, float | int | str]:
+        """
+        Ejecuta una predicción para una sola fila de entrada.
+
+        Requisitos:
+        - `entrada` debe tener exactamente una fila.
+        - Debe contener todas las columnas CDC en el orden esperado.
+        """
         if self._modelo is None:
             raise FileNotFoundError("Modelo no cargado. Ejecuta cargar_modelo() primero.")
         if entrada.empty or len(entrada) != 1:

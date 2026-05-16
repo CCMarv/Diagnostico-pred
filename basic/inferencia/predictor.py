@@ -7,11 +7,11 @@ from typing import Any
 import joblib
 import pandas as pd
 
-from config import COLUMNAS_CDC, RUTA_MODELO_FINAL, VERSION_SISTEMA
+from basic.config import COLUMNAS_CDC, RUTA_MODELO_FINAL, VERSION_SISTEMA
 
 
 class PredictorDiabetes:
-    """Encapsula carga y predicción del modelo de riesgo de diabetes."""
+    """Carga un modelo serializado y ejecuta predicción para una fila."""
 
     def __init__(self, ruta_modelo: Path | None = None, version: str = VERSION_SISTEMA) -> None:
         self.ruta_modelo = ruta_modelo or RUTA_MODELO_FINAL
@@ -42,8 +42,7 @@ class PredictorDiabetes:
         inicio = time.perf_counter()
 
         if hasattr(self._modelo, "predict_proba"):
-            proba_raw = self._modelo.predict_proba(entrada_ordenada)
-            probabilidad = float(proba_raw[0][-1])
+            probabilidad = float(self._modelo.predict_proba(entrada_ordenada)[0][-1])
             clase = int(probabilidad >= 0.5)
         else:
             clase = int(self._modelo.predict(entrada_ordenada)[0])
