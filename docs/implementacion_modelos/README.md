@@ -38,6 +38,8 @@ Los contenidos teóricos históricos han sido integrados como resúmenes embebid
 
 > Nota: La carpeta de materiales históricos puede eliminarse una vez verificada la migración completa de contenido útil hacia `GUIA_UNIFICADA.md` y los archivos específicos por modelo.
 
+> Estado del repositorio al 2026-05-17: `FenotipadoKMeans` y `OptimizadorHiperparametros` ya existen en `entrenamiento/` y sus pruebas asociadas están en verde, así que la documentación ya puede referenciarlos como implementación real.
+
 ---
 
 ## 🚀 Cómo usar esta documentación
