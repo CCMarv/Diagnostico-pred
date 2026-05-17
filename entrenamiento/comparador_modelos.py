@@ -37,8 +37,14 @@ class ResultadoModelo:
 class ComparadorModelos:
     """Comparador de modelos supervisados y clustering para experimentación clínica."""
 
-    def __init__(self) -> None:
-        self._preprocesador = ConstructorPreprocesador()
+    def __init__(self, use_knn: bool = False, use_smote: bool = False, smote_kwargs: dict | None = None) -> None:
+        """
+        Parámetros:
+        - `use_knn`: usar `KNNImputer` para continuas si True.
+        - `use_smote`: incluir `SMOTE` dentro del `Pipeline` de entrenamiento cuando esté disponible.
+        - `smote_kwargs`: argumentos para `SMOTE(...)`.
+        """
+        self._preprocesador = ConstructorPreprocesador(use_knn=use_knn, use_smote=use_smote, smote_kwargs=smote_kwargs)
         # Catálogo central: aquí se define qué modelos compiten y qué hiperparámetros se exploran.
         # La SVM se registra con GridSearch porque es el modelo del que más depende el ajuste fino.
         self._catalogo_modelos = {

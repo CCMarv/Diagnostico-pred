@@ -1,222 +1,259 @@
 # diasgnostico-pred — Hoja de Ruta
 
-**Última actualización:** 2026-05-14 | **Metodología:** Espiral iterativa, 5 sprints
+**Última actualización:** 2026-05-17
+**Estructura:** alineada a la rúbrica del proyecto final
+**Calificación objetivo:** 100 base + 30 puntos extra (Nivel Avanzado)
+
+---
+
+## Mapa de calificación
+
+```
+Calificación final = Base (0-100) + Puntos extra
+
+Base:
+  Código y Técnica  × 0.40   ← mayor peso; pipeline, tests, documentación
+  Resultados        × 0.30   ← métricas, comparativa, interpretación
+  Reporte           × 0.20   ← estructura, visualizaciones, conclusiones
+  Presentación      × 0.10   ← demo funcional, defensa oral
+
+Puntos extra:
+  Nivel Básico     →   +0   (piso mínimo para aprobar)
+  Nivel Intermedio → +15   (requiere Básico completo)
+  Nivel Avanzado   → +30   (requiere Intermedio completo)
+```
 
 ---
 
 ## Estado general
 
-| Dimensión | Estado |
-|---|---|
-| Sprint 1 — Andamiaje base | ✅ Completo |
-| Sprint 2 — Pipeline de datos y modelos supervisados | ⚠️ 8/10 tickets completos; 2 artefactos pendientes |
-| Sprint 3 — Fenotipado metabólico y Dashboard | ❌ No iniciado |
-| Sprint 4 — Reporte académico y despliegue | ❌ No iniciado |
-| Sprint 5 — Observabilidad y endurecimiento | ❌ No iniciado |
-
-### Bloqueantes actuales del Sprint 2 (deben resolverse antes del Sprint 3)
-
-- `notebooks/01_eda_regionalizado.ipynb` — creado pero sin validación completa con datos reales
-- `reportes/contraste_regional.md` — el script generador existe; el artefacto de salida no se ha producido con el dataset real
+| Sprint | Descripción | Ítems de rúbrica | Estado |
+|--------|-------------|------------------|--------|
+| S1 | Andamiaje base | — | ✅ Completo |
+| S2 | Pipeline robusto y modelos supervisados | B1, B2, B3 — **Nivel Básico** | ✅ Validado |
+| S3 | K-Means, hiperparámetros y dashboard | I1–I6 — **Nivel Intermedio** | ⬜ Pendiente |
+| S4 | Reporte y presentación | Componentes Reporte 20% + Presentación 10% | ⬜ Pendiente |
+| S5 | API y comparativa con papers | A1, A2 — **Nivel Avanzado** | ⬜ Pendiente |
 
 ---
 
-## Sprint 1 — Andamiaje y contratos base
+## Sprint 1 — Andamiaje base
 
-**Objetivo:** Establecer la arquitectura modular completa, contratos de interfaces y una suite mínima de pruebas de contrato. El repositorio debe ser clonable, instalable y ejecutable sin modelo real.
+**Estado: ✅ Completo**
+**Impacto en rúbrica:** sienta la base del componente Código y Técnica (40%).
 
-**Estado:** ✅ Completo
-
-| ID | Entregable | Estado |
-|---|---|---|
-| S1-01 | `config.py` con constantes globales, rutas y columnas CDC | ✅ |
-| S1-02 | `entrenamiento/cargador_datos.py` — clase `CargadorDatos` | ✅ |
-| S1-03 | `entrenamiento/comparador_modelos.py` — clase `ComparadorModelos` (stub) | ✅ |
-| S1-04 | `entrenamiento/pipeline.py` — CLI + `ejecutar_pipeline()` | ✅ |
-| S1-05 | `inferencia/predictor.py` — clase `PredictorDiabetes` | ✅ |
-| S1-06 | `api/esquemas.py` — `DatosPaciente`, `RespuestaPrediccion`, `RespuestaSalud` | ✅ |
-| S1-07 | `api/main.py` — endpoints `/salud` y `/predecir` con modo degradado | ✅ |
-| S1-08 | `pruebas/test_api.py` — pruebas de contrato HTTP | ✅ |
-| S1-09 | `pruebas/test_cargador.py` — pruebas de carga y limpieza | ✅ |
-| S1-10 | `pruebas/test_predictor.py` — pruebas con modelos simulados | ✅ |
-| S1-11 | `pyproject.toml`, `.env.example`, `modelos/.gitkeep` | ✅ |
-
----
-
-## Sprint 2 — Pipeline de datos robusto y modelado supervisado
-
-**Objetivo:** Reemplazar `DummyClassifier` con un pipeline de calidad clínica: preprocesamiento, tres modelos supervisados, métricas clínicas y artefactos serializados.
-
-**Estado:** ⚠️ 8/10 completos
-
-| ID | Tarea | Prioridad | Dependencia | Estado |
-|---|---|---|---|---|
-| S2-01 | Descargar CDC BRFSS 2015 vía `ucimlrepo` → `datos/brutos/` | CRÍTICA | — | ✅ Completo |
-| S2-02 | Crear `notebooks/01_eda_regionalizado.ipynb` (6 bloques) | CRÍTICA | S2-01 | 
-| S2-01 | Descargar CDC BRFSS 2015 vía `ucimlrepo` → `datos/brutos/` | CRÍTICA | — | ✅ Completo |
-| S2-03 | Implementar `entrenamiento/preprocesador.py` con `ColumnTransformer` | CRÍTICA | S2-01 | ✅ Completo |
-| S2-04 | Extender `ComparadorModelos` con SVM, GBM, MLP usando Pipeline sklearn | CRÍTICA | S2-03 | ✅ Completo |
-| S2-05 | Crear `entrenamiento/evaluador.py` con métricas clínicas + gráficas | ALTA | S2-04 | ✅ Completo |
-| S2-06 | Ampliar `entrenamiento/pipeline.py` para serializar Pipeline completo | ALTA | S2-03, S2-04 | ✅ Completo |
-| S2-07 | Añadir `pruebas/test_preprocesador.py` — verifica ausencia de data leakage | ALTA | S2-03 | ✅ Completo |
-| S2-08 | Ampliar `pruebas/test_cargador.py` con análisis de distribución y desbalance | MEDIA | S2-01 | ✅ Completo |
-| S2-09 | Persistir dataset procesado en `datos/procesados/` formato Parquet | MEDIA | S2-03 | ⚠️ Parcial — método `persistir_procesado()` existe; sin artefacto versionado en repo |
-| S2-10 | Generar `reportes/contraste_regional.md` con datos reales | MEDIA | S2-02 | ⚠️ Parcial — script generador en `reportes/generar_contraste_regional.py`; salida no producida |
+| ID | Entregable | Archivo | Estado |
+|----|------------|---------|--------|
+| S1-01 | Configuración central: rutas, columnas CDC y constantes | `config.py` | ✅ |
+| S1-02 | Cargador de datos | `entrenamiento/cargador_datos.py` | ✅ |
+| S1-03 | Comparador de modelos (esqueleto) | `entrenamiento/comparador_modelos.py` | ✅ |
+| S1-04 | Pipeline base | `entrenamiento/pipeline.py` | ✅ |
+| S1-05 | Predictor de inferencia | `inferencia/predictor.py` | ✅ |
+| S1-06 | Esquemas de la API | `api/esquemas.py` | ✅ |
+| S1-07 | API principal (esqueleto) | `api/main.py` | ✅ |
+| S1-08 | Pruebas de API | `pruebas/test_api.py` | ✅ |
+| S1-09 | Pruebas de cargador | `pruebas/test_cargador.py` | ✅ |
+| S1-10 | Pruebas de predictor | `pruebas/test_predictor.py` | ✅ |
+| S1-11 | Empaquetado del proyecto | `pyproject.toml`, `.env.example`, `modelos/.gitkeep` | ✅ |
 
 ---
 
-## Sprint 3 — Fenotipado metabólico y Dashboard Streamlit
+## Sprint 2 — Pipeline robusto y modelos supervisados
 
-**Objetivo:** Implementar K-Means como fenotipador clínico (no como predictor), construir el dashboard Streamlit orientado al médico general y generar artefactos de explicabilidad SHAP.
+**Estado: ✅ Validado** (experimento 1000 muestras — `reportes/comparativa_1000_intermedio.md`)
+**Ítems de rúbrica cubiertos: B1, B2, B3 → Nivel Básico**
 
-**Estado:** ❌ No iniciado — bloqueado en S2-09, S2-10
+> La evidencia experimental valida: `Pipeline` completo y serializable con `KNNImputer`,
+> `SMOTE`, `GridSearchCV` + `StratifiedKFold`, modelos `svm`, `arbol`, `gbm`, `mlp`,
+> y tabla comparativa con ROC-AUC, PR-AUC, sensibilidad, especificidad, F1, Brier y accuracy.
 
-| ID | Tarea | Prioridad | Dependencia | Estado |
-|---|---|---|---|---|
-| S3-01 | Implementar `entrenamiento/fenotipador.py` (método del codo + silhouette) | CRÍTICA | S2-04 | ⬜ Pendiente |
-| S3-02 | Integrar fenotipador como etapa 0 en pipeline supervisado | CRÍTICA | S3-01, S2-06 | ⬜ Pendiente |
-| S3-03 | Generar `reportes/perfiles_fenotipos.md` con prevalencia de diabetes por cluster | CRÍTICA | S3-01 | ⬜ Pendiente |
-| S3-04 | Crear `dashboard/app.py` — Pantalla 1: formulario de captura | CRÍTICA | — | ⬜ Pendiente |
-| S3-05 | Crear `dashboard/app.py` — Pantalla 2: resultado con gauge y SHAP | ALTA | S3-04, S3-07 | ⬜ Pendiente |
-| S3-06 | Crear `dashboard/app.py` — Pantalla 3: panel estadístico del médico | ALTA | S3-04 | ⬜ Pendiente |
-| S3-07 | Calcular SHAP values para el mejor modelo supervisado | ALTA | S2-04 | ⬜ Pendiente |
-| S3-08 | Crear `dashboard/cliente_api.py` con manejo de errores 503 | ALTA | S3-04 | ⬜ Pendiente |
-| S3-09 | Crear `.streamlit/config.toml` con tema IMSS | MEDIA | S3-04 | ⬜ Pendiente |
-| S3-10 | Añadir `pruebas/test_fenotipador.py` — pruebas de integración | MEDIA | S3-01 | ⬜ Pendiente |
-| S3-11 | Prueba de integración: formulario Streamlit → API → resultado coherente | MEDIA | S3-05, S3-08 | ⬜ Pendiente |
+| ID | Tarea | Ítem rúbrica | Archivo | Estado |
+|----|-------|--------------|---------|--------|
+| S2-01 | Dataset CDC BRFSS 2015 disponible | B2 | `datos/brutos/diabetes_binary_health_indicators_BRFSS2015.csv` | ✅ |
+| S2-02 | EDA regionalizado | Resultados 30% | `notebooks/01_eda_regionalizado.ipynb` | ✅ |
+| S2-03 | Preprocesador robusto con `KNNImputer`, `ColumnTransformer` y `SMOTE` dentro del `Pipeline` | B2 | `entrenamiento/preprocesador.py` | ✅ |
+| S2-04 | Modelos supervisados: `svm`, `arbol`, `gbm`, `mlp` | B1, I1, I2, I3 | `entrenamiento/comparador_modelos.py` | ✅ |
+| S2-05 | Evaluador clínico con PR-AUC, ROC-AUC, F1, sensibilidad, especificidad | B3 | `entrenamiento/evaluador.py` | ✅ |
+| S2-06 | Pipeline serializable con `predict_proba` expuesto | B1, B2 | `joblib.dump(Pipeline completo)` | ✅ |
+| S2-07 | Pruebas del preprocesador | Código y Técnica 40% | `pruebas/test_preprocesador.py` | ✅ |
+| S2-08 | Pruebas del cargador | Código y Técnica 40% | `pruebas/test_cargador.py` | ✅ |
+| S2-09 | Persistencia del dataset procesado en Parquet | Resultados 30% | `datos/procesados/dataset_procesado.parquet` | 🟡 Parcial |
+| S2-10 | Contraste regional documentado | Reporte 20% | `reportes/contraste_regional.md` | 🟡 Parcial |
 
----
-
-## Sprint 4 — Reporte académico y despliegue final
-
-**Objetivo:** Producir el reporte académico en estructura IMRaD, contenerización Docker, GitHub Actions CI/CD y análisis de equidad.
-
-**Estado:** ❌ No iniciado — bloqueado en Sprint 3
-
-| ID | Tarea | Prioridad | Dependencia | Estado |
-|---|---|---|---|---|
-| S4-01 | Redactar secciones 1–3 de `reportes/paper_final.md` con resultados del EDA | CRÍTICA | S2-02 | ⬜ Pendiente |
-| S4-02 | Completar secciones 4–5 con tablas de resultados y gráficas generadas | CRÍTICA | S2-05, S3-07 | ⬜ Pendiente |
-| S4-03 | Implementar `entrenamiento/evaluador_equidad.py` — ROC-AUC por subgrupo | CRÍTICA | S2-05 | ⬜ Pendiente |
-| S4-04 | Redactar sección 6 (Discusión) con contraste CDC ↔ ENSANUT | ALTA | S4-01, S4-02 | ⬜ Pendiente |
-| S4-05 | Crear `Dockerfile` multi-stage (targets API + Dashboard) | ALTA | S3-08 | ⬜ Pendiente |
-| S4-06 | Crear `docker-compose.yml` (servicio API + servicio Dashboard) | ALTA | S4-05 | ⬜ Pendiente |
-| S4-07 | Configurar `.github/workflows/ci.yml` — lint + pytest + build de imagen | ALTA | — | ⬜ Pendiente |
-| S4-08 | Añadir `pip-audit` al pipeline de CI | MEDIA | S4-07 | ⬜ Pendiente |
-| S4-09 | Exportar paper a PDF vía nbconvert o pandoc | MEDIA | S4-02 | ⬜ Pendiente |
-| S4-10 | Etiquetar versión `v1.0.0` en el repositorio | MEDIA | S4-09 | ⬜ Pendiente |
+**Veredicto Básico:** COMPLETADO — B1 ✅ B2 ✅ B3 ✅
+**Pendientes de cierre limpio:** S2-09 y S2-10 (no bloquean el nivel; sí enriquecen Resultados 30% y Reporte 20%).
 
 ---
 
-## Sprint 5 — Observabilidad, endurecimiento y documentación final
+## Sprint 3 — K-Means, optimización e hiperparámetros
 
-**Objetivo:** Sistema observable en producción, resistente a fallos y completamente documentado para operaciones y usuarios clínicos.
+**Estado: ⬜ Pendiente**
+**Ítems de rúbrica cubiertos: I1, I2, I3, I4, I5 → parcial de Nivel Intermedio**
+**Prerequisito:** Sprint 2 validado ✅
 
-**Estado:** ❌ No iniciado — bloqueado en Sprint 4
+> Los modelos SVM, Árbol, MLP y GBM ya existen en `comparador_modelos.py` desde S2.
+> Este sprint los consolida bajo evaluación uniforme (I1-I3), añade K-Means formal (I4)
+> y formaliza la optimización de hiperparámetros como módulo independiente (I5).
 
-| ID | Tarea | Prioridad | Dependencia | Estado |
-|---|---|---|---|---|
-| S5-01 | Pipeline CI/CD con lint, pruebas y build de imagen | ALTA | — | ⬜ Pendiente |
-| S5-02 | Análisis estático de tipos con `mypy` o `pyright` | ALTA | — | ⬜ Pendiente |
-| S5-03 | Linting con `ruff` + hooks de pre-commit | ALTA | — | ⬜ Pendiente |
-| S5-04 | Monitoreo de drift de datos (detección de distribución fuera del rango de entrenamiento) | MEDIA | S4-06 | ⬜ Pendiente |
-| S5-05 | Documentar proceso de re-entrenamiento y estrategia de actualización del modelo | MEDIA | S4-05 | ⬜ Pendiente |
-| S5-06 | Guía de despliegue en producción (Cloud Run / ECS / VPS con Docker) | MEDIA | S4-06 | ⬜ Pendiente |
-| S5-07 | Manual de usuario para personal clínico (interpretación de categorías y advertencias) | MEDIA | S3-05 | ⬜ Pendiente |
-| S5-08 | Auditoría de seguridad: `pip audit`, cabeceras HTTP seguras | MEDIA | S4-07 | ⬜ Pendiente |
-| S5-09 | Revisión de equidad (fairness) por grupo de edad, sexo e ingreso | ALTA | S4-03 | ⬜ Pendiente |
-| S5-10 | Etiqueta de versión estable `v1.0.0` en el repositorio | BAJA | S5-09 | ⬜ Pendiente |
+| ID | Tarea | Ítem rúbrica | Archivo | Estado |
+|----|-------|--------------|---------|--------|
+| S3-01 | Verificar que SVM, Árbol y MLP se evalúan con las mismas métricas que GBM | I1, I2, I3 | `entrenamiento/comparador_modelos.py` | ⬜ |
+| S3-02 | K-Means con `init='k-means++'`, método del codo y `silhouette_score` | I4 | `entrenamiento/fenotipado.py` | ⬜ |
+| S3-03 | Notebook de análisis de fenotipos (visualización de clústeres, interpretación) | I4, Resultados 30% | `notebooks/02_fenotipado_kmeans.ipynb` | ⬜ |
+| S3-04 | `GridSearchCV` con `StratifiedKFold` como módulo formal (ya validado en experimento) | I5 | `entrenamiento/optimizador.py` | ⬜ |
+| S3-05 | Pruebas del fenotipador | Código y Técnica 40% | `pruebas/test_fenotipado.py` | ⬜ |
+| S3-06 | Pruebas del optimizador | Código y Técnica 40% | `pruebas/test_optimizador.py` | ⬜ |
+| S3-07 | Cerrar S2-09: persistir `dataset_procesado.parquet` | Resultados 30% | `datos/procesados/dataset_procesado.parquet` | ⬜ |
+| S3-08 | Cerrar S2-10: documentar contraste regional real | Reporte 20% | `reportes/contraste_regional.md` | ⬜ |
 
----
-
-## Estructura de directorios objetivo (al completar Sprint 4)
-
-```
-diasgnostico-pred/
-├── api/
-│   ├── __init__.py
-│   ├── config.py
-│   ├── esquemas.py
-│   └── main.py
-├── dashboard/
-│   ├── __init__.py
-│   ├── app.py                              ← S3-04/05/06
-│   └── cliente_api.py                      ← S3-08
-├── datos/
-│   ├── brutos/
-│   │   └── diabetes_binary_health_indicators_BRFSS2015.csv
-│   └── procesados/
-│       └── dataset_procesado.parquet       ← S2-09
-├── entrenamiento/
-│   ├── __init__.py
-│   ├── cargador_datos.py
-│   ├── comparador_modelos.py
-│   ├── evaluador.py
-│   ├── evaluador_equidad.py                ← S4-03
-│   ├── fenotipador.py                      ← S3-01
-│   └── preprocesador.py
-├── inferencia/
-│   ├── __init__.py
-│   └── predictor.py
-├── modelos/
-│   ├── .gitkeep
-│   ├── fenotipador.joblib                  ← S3-01
-│   └── modelo_diabetes_v1.joblib           ← S2-06
-├── notebooks/
-│   └── 01_eda_regionalizado.ipynb          ← S2-02
-├── pruebas/
-│   ├── __init__.py
-│   ├── test_api.py
-│   ├── test_cargador.py
-│   ├── test_fenotipador.py                 ← S3-10
-│   ├── test_predictor.py
-│   └── test_preprocesador.py
-├── reportes/
-│   ├── comparativa_modelos.md              ← S2-05
-│   ├── contraste_regional.md               ← S2-10
-│   ├── perfiles_fenotipos.md               ← S3-03
-│   ├── shap_summary.png                    ← S3-07
-│   └── paper_final.md                      ← S4-01/02
-├── .env.example
-├── .github/workflows/ci.yml                ← S4-07
-├── .streamlit/config.toml                  ← S3-09
-├── config.py
-├── docker-compose.yml                      ← S4-06
-├── Dockerfile                              ← S4-05
-└── pyproject.toml
+**Validación de cierre de Sprint 3:**
+```bash
+pytest pruebas/test_fenotipado.py -v
+pytest pruebas/test_optimizador.py -v
+pytest pruebas/ --cov=entrenamiento --cov-report=term-missing
 ```
 
 ---
 
-## Checklist de entrega para máxima calificación
+## Sprint 4 — Dashboard interactivo
 
-### Nivel Básico (Sprint 2)
+**Estado: ⬜ Pendiente**
+**Ítems de rúbrica cubiertos: I6 → completa Nivel Intermedio (+15)**
+**Prerequisito:** Sprint 3 completo ✅
 
-- [ ] 3 modelos supervisados entrenados con dataset real
-- [ ] Preprocesamiento documentado y sin data leakage
-- [ ] Tabla de métricas comparativa (accuracy, F1, AUC)
+> I6 es el único ítem de Intermedio que requiere trabajo fuera de `entrenamiento/`.
+> Se separa en sprint propio porque tiene dependencias distintas (Streamlit)
+> y su validación es funcional (ejecutar la app), no solo de pruebas unitarias.
 
-### Nivel Intermedio (Sprint 3)
+| ID | Tarea | Ítem rúbrica | Archivo | Estado |
+|----|-------|--------------|---------|--------|
+| S4-01 | Instalar y configurar Streamlit en el proyecto | I6 | `pyproject.toml` (añadir `streamlit`) | ⬜ |
+| S4-02 | Vista de comparativa de modelos (tabla de métricas interactiva) | I6 | `dashboard/app.py` | ⬜ |
+| S4-03 | Vista de predicción individual (formulario → resultado) | I6, Presentación 10% | `dashboard/app.py` | ⬜ |
+| S4-04 | Vista de fenotipos K-Means (gráfica de clústeres) | I6, Resultados 30% | `dashboard/app.py` | ⬜ |
+| S4-05 | El dashboard carga el pipeline serializado para inferencia | I6, B1 | `dashboard/app.py` | ⬜ |
 
-- [ ] SVM con kernel RBF y búsqueda de hiperparámetros
-- [ ] Árbol de decisión / Gradient Boosting con importancia de variables
-- [ ] Red neuronal (MLP) con early stopping
-- [ ] K-Means como fenotipador metabólico (no como predictor) con K justificado
-- [ ] Dashboard Streamlit con interfaz de consultorio IMSS
+**Validación de cierre de Sprint 4:**
+```bash
+streamlit run dashboard/app.py
+# Verificar manualmente:
+# - Vista de comparativa carga y muestra la tabla de métricas
+# - Formulario de predicción devuelve resultado
+# - Gráfica de clústeres se renderiza
+```
 
-### Nivel Avanzado (API completada + Sprint 4)
+**Veredicto Intermedio al cerrar S4:** I1 ✅ I2 ✅ I3 ✅ I4 ✅ I5 ✅ I6 ✅ → **+15 puntos extra**
 
-- [ ] API REST FastAPI en producción con validación clínica — **✅ completado**
-- [ ] Análisis de sesgo poblacional CDC ↔ México documentado
-- [ ] SHAP values para interpretabilidad clínica
-- [ ] Análisis de equidad por subgrupo demográfico
-- [ ] Comparativa con literatura sobre T2DM en población hispana
-- [ ] Curvas de calibración + Brier Score
+---
 
-### Diferenciadores competitivos
+## Sprint 5 — Reporte y cierre de presentación
 
-- [ ] Fenotipado metabólico con nombres clínicos interpretables
-- [ ] Umbral de decisión ajustado para contexto México (0.25 en lugar de 0.33)
-- [ ] Limitaciones redactadas como contribuciones metodológicas
-- [ ] Recomendaciones de trabajo futuro con datos ENSANUT reales
-- [ ] Análisis de fairness explícito con métricas de paridad demográfica
+**Estado: ⬜ Pendiente**
+**Ítems de rúbrica cubiertos: Reporte 20% + Presentación 10%**
+**Prerequisito:** Sprint 4 completo ✅
+
+> Este sprint no añade código nuevo; consolida el trabajo existente en
+> documentación evaluable y prepara el artefacto de demo para la defensa oral.
+
+| ID | Tarea | Componente rúbrica | Archivo | Estado |
+|----|-------|--------------------|---------|--------|
+| S5-01 | Reporte principal: introducción y planteamiento del problema | Reporte 20% | `reportes/reporte_final.md` | ⬜ |
+| S5-02 | Reporte: metodología (pipeline, modelos, métricas, decisiones técnicas) | Reporte 20% | `reportes/reporte_final.md` | ⬜ |
+| S5-03 | Reporte: resultados con visualizaciones (curvas ROC, PR, matriz de confusión) | Reporte 20%, Resultados 30% | `reportes/reporte_final.md` | ⬜ |
+| S5-04 | Reporte: conclusiones y limitaciones del proyecto | Reporte 20% | `reportes/reporte_final.md` | ⬜ |
+| S5-05 | Preparar guía de ejecución del demo (`README_demo.md`) | Presentación 10% | `README_demo.md` | ⬜ |
+| S5-06 | Ensayo de defensa: respuestas preparadas a preguntas típicas del temario | Presentación 10% | `docs/preguntas_defensa.md` | ⬜ |
+| S5-07 | Verificación final: ejecutar pipeline, dashboard y pruebas sin errores | Todos | — | ⬜ |
+
+**Validación de cierre de Sprint 5:**
+```bash
+# Pruebas completas sin errores
+pytest pruebas/ -v --tb=short
+
+# Dashboard funcional
+streamlit run dashboard/app.py
+
+# Panel Problems de VS Code limpio en todos los módulos de entrenamiento
+```
+
+---
+
+## Sprint 6 — API en producción y comparativa con papers
+
+**Estado: ⬜ Pendiente**
+**Ítems de rúbrica cubiertos: A1, A2 → Nivel Avanzado (+30)**
+**Prerequisito:** Sprint 5 completo ✅ — no iniciar si el reporte o la base no están sólidos.
+
+> El esqueleto de la API ya existe desde S1 (`api/main.py`, `api/esquemas.py`).
+> Este sprint lo hace funcional con el pipeline entrenado y añade la comparativa
+> académica al reporte.
+
+| ID | Tarea | Ítem rúbrica | Archivo | Estado |
+|----|-------|--------------|---------|--------|
+| S6-01 | Conectar `api/main.py` con el pipeline serializado para inferencia real | A1 | `api/main.py` | ⬜ |
+| S6-02 | Endpoint `POST /predict` con validación de entrada por esquemas | A1 | `api/main.py`, `api/esquemas.py` | ⬜ |
+| S6-03 | Endpoint `GET /health` para verificar estado del servicio | A1 | `api/main.py` | ⬜ |
+| S6-04 | Pruebas de integración de los endpoints | A1, Código y Técnica 40% | `pruebas/test_api.py` (actualizar) | ⬜ |
+| S6-05 | Instrucciones de arranque documentadas | A1, Presentación 10% | `README_demo.md` (añadir sección API) | ⬜ |
+| S6-06 | Identificar 1–2 papers académicos relevantes (diabetes, predicción clínica, ML) | A2 | — | ⬜ |
+| S6-07 | Sección de comparativa con papers en el reporte final | A2, Reporte 20% | `reportes/reporte_final.md` | ⬜ |
+
+**Validación de cierre de Sprint 6:**
+```bash
+# API levanta sin errores
+uvicorn api.main:app --reload
+
+# Endpoint responde correctamente
+curl -X POST http://localhost:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"HighBP": 1, "HighChol": 0, ...}'
+
+# Pruebas de API pasan
+pytest pruebas/test_api.py -v
+```
+
+**Veredicto Avanzado al cerrar S6:** A1 ✅ A2 ✅ → **+30 puntos extra**
+
+---
+
+## Calificación proyectada al completar cada sprint
+
+| Al cerrar | Nivel | Puntos extra | Componentes base cubiertos |
+|-----------|-------|--------------|----------------------------|
+| Sprint 2 | Básico | +0 | Código y Técnica parcial, Resultados parcial |
+| Sprint 3 | Básico → Intermedio parcial | +0 | Código y Técnica mejorado, Resultados mejorado |
+| Sprint 4 | Intermedio | **+15** | Presentación habilitada |
+| Sprint 5 | Intermedio | **+15** | Reporte 20% + Presentación 10% completados |
+| Sprint 6 | Avanzado | **+30** | Todos los componentes al máximo |
+
+---
+
+## Regla de secuencialidad
+
+```
+S1 → S2 (✅ ya completos)
+         ↓
+        S3  ←  consolidar I1-I5 y K-Means formal
+         ↓
+        S4  ←  dashboard (I6) — desbloquea +15
+         ↓
+        S5  ←  reporte y demo — consolida Reporte 20% + Presentación 10%
+         ↓
+        S6  ←  API + papers (A1, A2) — desbloquea +30
+```
+
+No iniciar un sprint si el anterior tiene ítems de nivel sin completar.
+Los ítems `🟡 Parcial` de S2 (S2-09, S2-10) se cierran en S3 como S3-07 y S3-08.
+
+---
+
+## Próximo paso inmediato
+
+Iniciar **S3-01**: verificar que SVM, Árbol y MLP en `comparador_modelos.py`
+se evalúan con el mismo conjunto de métricas que GBM, y que los resultados
+quedan en la tabla comparativa del reporte.
+
+```bash
+# Punto de entrada para el agente
+@AcademicoIA inicia Sprint 3 — verifica cobertura uniforme de métricas en comparador_modelos.py
+```

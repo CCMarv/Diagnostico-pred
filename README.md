@@ -35,6 +35,17 @@ Este proyecto se mantiene de forma colaborativa y está dirigido a estudiantes u
 - Incluye análisis de sesgo distribucional CDC ↔ ENSANUT 2022 para documentar la transferibilidad del modelo a población mexicana.
 - Emite advertencia automática cuando la probabilidad predicha cae dentro del margen de incertidumbre (±5% de cualquier umbral), indicando la necesidad de evaluación clínica adicional.
 
+### Evidencia experimental reciente
+
+El repositorio incluye una corrida académica reproducible sobre 1000 muestras para validar la ruta mínima y la transición hacia Nivel Intermedio:
+
+- [entrenamiento/run_complete_1000.py](entrenamiento/run_complete_1000.py) ejecuta SVM, Árbol, GBM y MLP con `KNNImputer`, `SMOTE`, `GridSearchCV` y `StratifiedKFold`.
+- [entrenamiento/generar_artefactos_sprint2.py](entrenamiento/generar_artefactos_sprint2.py) persiste el dataset procesado y genera el contraste regional real.
+- [reportes/comparativa_1000_intermedio.md](reportes/comparativa_1000_intermedio.md) documenta la comparación académica con métricas clínicas completas.
+- [reportes/contraste_regional.md](reportes/contraste_regional.md) resume el sesgo distribucional CDC vs ENSANUT.
+
+Estas evidencias se usaron para actualizar [docs/evaluacion_academica.md](docs/evaluacion_academica.md) y la ruta compacta del proyecto.
+
 ---
 
 ## Requisitos del sistema
@@ -104,6 +115,15 @@ La corrida completa debe dejar estos artefactos como evidencia:
 - `reportes/metricas_sprint1.json`
 - `reportes/comparativa_modelos.md`
 - `reportes/curvas_<modelo>.png`
+
+Para validaciones académicas más recientes, también se generan:
+
+- `datos/procesados/dataset_procesado.parquet`
+- `reportes/contraste_regional.md`
+- `reportes/comparativa_1000_intermedio.md`
+- `reportes/comparativa_1000_intermedio.csv`
+
+Si el objetivo es revisar la rúbrica hasta Nivel Intermedio, la corrida de 1000 muestras es suficiente para auditar el flujo sin tener que repetir el entrenamiento completo del dataset.
 
 Si el entrenamiento tarda demasiado, eso es esperable en el estado actual; lo importante es que siga mostrando progreso y termine con artefactos válidos.
 

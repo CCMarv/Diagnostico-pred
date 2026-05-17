@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Final
 
 from sklearn.compose import ColumnTransformer
-from sklearn.impute import SimpleImputer
+from sklearn.impute import SimpleImputer, KNNImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 
@@ -40,6 +40,17 @@ class ConstructorPreprocesador:
     }
     COLUMNA_FENOTIPO: Final[str] = "fenotipo"
 
+    def __init__(self, use_knn: bool = False, use_smote: bool = False, smote_kwargs: dict | None = None) -> None:
+        """
+        Parámetros opcionales:
+        - `use_knn`: si True, usa `KNNImputer` para variables continuas en lugar de `SimpleImputer(median)`.
+        - `use_smote`: si True, los métodos `construir_pipeline` retornarán una `imblearn.pipeline.Pipeline` que incluye `SMOTE`.
+        - `smote_kwargs`: argumentos pasados a `SMOTE(...)` si `use_smote` es True.
+        """
+        self.use_knn = use_knn
+        self.use_smote = use_smote
+        self.smote_kwargs = smote_kwargs or {}
+
     def construir(self) -> ColumnTransformer:
         """
         Propósito:
@@ -47,9 +58,11 @@ class ConstructorPreprocesador:
         """
         # Las columnas se separan por tipo para tratar cada una con la transformación correcta.
         # Esto evita escalar variables binarias y conserva el orden clínico de las ordinales.
+        # Elegir imputador de continuas; por defecto SimpleImputer(median), opcionalmente KNNImputer.
+        imputador_continuas = KNNImputer() if getattr(self, "use_knn", False) else SimpleImputer(strategy="median")
         continuas = Pipeline(
             steps=[
-                ("imputer", SimpleImputer(strategy="median")),
+                ("imputer", imputador_continuas),
                 ("scaler", StandardScaler()),
             ]
         )
@@ -86,13 +99,18 @@ class ConstructorPreprocesador:
         """
         # El Pipeline empaqueta transformación + modelo en un solo artefacto serializable.
         # Así validación e inferencia ven exactamente el mismo flujo que entrenamiento.
-        return Pipeline(
-            memory=None,
-            steps=[
-                ("preprocesador", self.construir()),
-                ("clasificador", clasificador),
-            ]
-        )
+        if getattr(self, "use_smote", False):
+            # Importar de forma local para evitar ImportError si imbalanced-learn no está instalado.
+            try:
+                from imblearn.over_sampling import SMOTE
+                from imblearn.pipeline import Pipeline as ImbPipeline
+
+                resampler = SMOTE(**self.smote_kwargs)
+                return ImbPipeline(steps=[("preprocesador", self.construir()), ("resample", resampler), ("clasificador", clasificador)])
+            except Exception:
+                # Fallback seguro a Pipeline estándar si la librería no está disponible.
+                return Pipeline(memory=None, steps=[("preprocesador", self.construir()), ("clasificador", clasificador)])
+        return Pipeline(memory=None, steps=[("preprocesador", self.construir()), ("clasificador", clasificador)])
 
     def construir_pipeline_con_fenotipo(self, clasificador) -> Pipeline:
         """
@@ -103,7 +121,7 @@ class ConstructorPreprocesador:
         # Se deja separada para no contaminar el pipeline base cuando esa columna no exista.
         continuas = Pipeline(
             steps=[
-                ("imputer", SimpleImputer(strategy="median")),
+                ("imputer", KNNImputer() if getattr(self, "use_knn", False) else SimpleImputer(strategy="median")),
                 ("scaler", StandardScaler()),
             ]
         )
