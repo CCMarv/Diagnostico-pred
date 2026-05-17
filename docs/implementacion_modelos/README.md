@@ -40,6 +40,8 @@ Los contenidos teóricos históricos han sido integrados como resúmenes embebid
 
 > Estado del repositorio al 2026-05-17: `FenotipadoKMeans` y `OptimizadorHiperparametros` ya existen en `entrenamiento/` y sus pruebas asociadas están en verde, así que la documentación ya puede referenciarlos como implementación real.
 
+> Estado del pipeline al 2026-05-17: los reportes operativos se generan a partir de un JSON crudo y se sintetizan en Markdown legible. No deben editarse manualmente como documentación fuente; si hace falta rehacerlos, se usa el pipeline y el script de síntesis.
+
 ---
 
 ## 🚀 Cómo usar esta documentación
