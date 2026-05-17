@@ -188,6 +188,8 @@ Explicación en lenguaje llano:
 
 Acción recomendada: los documentos de experimento deben anotar que GBM usa estos valores por defecto y que la búsqueda de parámetros es opcional y costosa.
 
+Actualización del repositorio: el catálogo sigue usando estos hiperparámetros por defecto en `entrenamiento/comparador_modelos.py`; si se requiere una búsqueda formal, debe documentarse aparte para no mezclar el baseline con experimentos adicionales.
+
 ## Referencia de capas en el proyecto
 
 1. **Definición:** [entrenamiento/comparador_modelos.py](../../entrenamiento/comparador_modelos.py) - instancia GradientBoostingClassifier
