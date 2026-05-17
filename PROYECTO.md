@@ -28,6 +28,8 @@
 │         entrenamiento/                       │
 │  cargador_datos.py  → limpieza CDC          │
 │  comparador_modelos.py → experimentos       │
+│  fenotipado.py → K-Means / fenotipado       │
+│  optimizador.py → GridSearchCV formal       │
 │  evaluador.py → métricas clínicas           │
 │  pipeline.py  → orquestador CLI             │
 └────────────────────┬────────────────────────┘
@@ -159,6 +161,8 @@ Cada modelo se serializa como un `sklearn.Pipeline` completo (preprocesador + es
 **Regla crítica de diseño para K-Means:** incluir `Diabetes_binary` en el clustering introduce sesgo de confirmación. K-Means debe ajustarse exclusivamente sobre `X_train` sin la variable objetivo. El fenotipo asignado se añade luego como feature adicional al pipeline supervisado.
 
 **Estado actual:** El fenotipador K-Means está documentado como componente de investigación, pero **no está integrado** en el pipeline de clasificación automatizado del repositorio. Su integración completa está planificada para Sprint 3 (trabajo futuro) y requiere las pruebas y la persistencia de fenotipos como artefacto intermedio.
+
+**Actualización 2026-05-17:** el repositorio ya incluye `FenotipadoKMeans` en `entrenamiento/fenotipado.py` y `OptimizadorHiperparametros` en `entrenamiento/optimizador.py`, con pruebas unitarias en verde para ambos módulos. La integración en la documentación sigue separando el flujo supervisado del flujo de fenotipado para mantener claridad de propósito.
 
 ---
 
