@@ -185,6 +185,16 @@ SHAP "abre la caja negra" al aproximar la contribución de cada variable a la pr
 
 ---
 
+## Coherencia con el código y notas para no-programadores
+
+- Implementación real: en `entrenamiento/comparador_modelos.py` el `MLPClassifier` se instancia con `hidden_layer_sizes=(64, 32)`, `activation='relu'`, `solver='adam'`, `max_iter=500`, `early_stopping=True`, `validation_fraction=0.1` y `random_state` fijo.
+
+Explicación en lenguaje llano:
+
+- "La red tiene dos capas ocultas (64 y 32 neuronas). Usa ReLU y el optimizador Adam. Para evitar que siga entrenando indefinidamente se activa `early_stopping`, que detiene el entrenamiento cuando la mejora en un subconjunto de validación se estanca." 
+
+Acción recomendada: documentar en experimentos cualquier cambio en `hidden_layer_sizes`, `alpha` o `learning_rate_init`, ya que estos impactan fuertemente convergencia y generalización.
+
 ## Referencia de capas en el proyecto
 
 1. **Definición:** [entrenamiento/comparador_modelos.py](../../entrenamiento/comparador_modelos.py) - instancia MLPClassifier
