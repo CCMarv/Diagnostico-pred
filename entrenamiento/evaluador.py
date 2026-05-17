@@ -3,6 +3,10 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 import logging
 from pathlib import Path
+import matplotlib
+
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -58,7 +62,7 @@ class EvaluadorClinico:
         y_pred = (y_prob >= 0.5).astype(int)
 
         matriz = confusion_matrix(y_true, y_pred, labels=[0, 1])
-        tn, fp, fn, tp = matriz.ravel()
+        tn, fp, _, _ = matriz.ravel()
         especificidad = float(tn / (tn + fp)) if (tn + fp) > 0 else 0.0
 
         return ResultadoEvaluacion(
