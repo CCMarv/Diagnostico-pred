@@ -218,3 +218,42 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project-specific ignores
+# Local IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Python build / caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual envs
+.venv/
+env/
+venv/
+
+# Packaging / build artifacts
+*.egg-info/
+Diasgnostico_pred.egg-info/
+
+# Model artifacts (do not version)
+modelos/*.joblib
+modelos/*.pkl
+modelos/*.sav
+
+# Raw datasets (do not version)
+datos/brutos/*
+!datos/brutos/.gitkeep
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Test / cache / logs
+.pytest_cache/
+coverage.xml
+*.log
