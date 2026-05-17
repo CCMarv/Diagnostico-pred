@@ -178,6 +178,15 @@ shap.dependence_plot("BMI", shap_values.values, X_sample_transformado)
 4. **Interpretabilidad con SHAP:** Si bien no es simple como Árbol, SHAP permite explicaciones rigurosas
 
 ---
+## Coherencia con el código y notas para no-programadores
+
+- Implementación real: el catálogo en `entrenamiento/comparador_modelos.py` crea un `GradientBoostingClassifier` con `n_estimators=200`, `max_depth=4`, `learning_rate=0.05` y `random_state` fijo. En el pipeline se conserva este estimador por defecto (no hay Grid para GBM en el catálogo actual).
+
+Explicación en lenguaje llano:
+
+- "El modelo está configurado para sumar 200 árboles pequeños (cada uno con profundidad 4). Esto da mucha capacidad para aprender relaciones complejas, pero el parámetro `learning_rate=0.05` asegura que cada árbol aporte poco a la vez, evitando cambios bruscos y mejorando generalización."
+
+Acción recomendada: los documentos de experimento deben anotar que GBM usa estos valores por defecto y que la búsqueda de parámetros es opcional y costosa.
 
 ## Referencia de capas en el proyecto
 
