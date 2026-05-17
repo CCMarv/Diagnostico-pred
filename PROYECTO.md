@@ -158,6 +158,8 @@ Cada modelo se serializa como un `sklearn.Pipeline` completo (preprocesador + es
 
 **Regla crítica de diseño para K-Means:** incluir `Diabetes_binary` en el clustering introduce sesgo de confirmación. K-Means debe ajustarse exclusivamente sobre `X_train` sin la variable objetivo. El fenotipo asignado se añade luego como feature adicional al pipeline supervisado.
 
+**Estado actual:** El fenotipador K-Means está documentado como componente de investigación, pero **no está integrado** en el pipeline de clasificación automatizado del repositorio. Su integración completa está planificada para Sprint 3 (trabajo futuro) y requiere las pruebas y la persistencia de fenotipos como artefacto intermedio.
+
 ---
 
 ## 6. Marco de explicabilidad y equidad
