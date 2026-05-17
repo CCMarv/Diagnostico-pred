@@ -132,10 +132,6 @@ class EvaluadorClinico:
             filas.append(fila)
 
         tabla = pd.DataFrame(filas).sort_values("roc_auc", ascending=False).reset_index(drop=True)
-        REPORTES_DIR.mkdir(parents=True, exist_ok=True)
-        ruta_md = REPORTES_DIR / "comparativa_modelos.md"
-        ruta_md.write_text(self._a_markdown(tabla), encoding="utf-8")
-        _LOG.info("Comparativa de modelos guardada en %s", ruta_md)
         return tabla
 
     def graficar_curva_calibracion(
