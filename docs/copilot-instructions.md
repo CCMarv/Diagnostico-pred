@@ -64,6 +64,8 @@ INSTRUCCIONES PARA EL AGENTE
 | `README_demo.md` | No existe | S5-005 |
 | `reportes/reporte_final.md` | No existe | S5-001 a S5-004 |
 
+> Regla operativa: los archivos dentro de `reportes/` son salidas derivadas. Si un informe debe rehacerse, primero se genera el JSON crudo en el pipeline y luego se reconstruye el Markdown legible con `scripts/generar_reporte_legible.py`.
+
 ---
 
 ### 1.3 Árbol de Dependencias Entre Módulos
@@ -163,7 +165,7 @@ sprint indicado en la columna "Dependencias".
 | S3-006 | Notebook de fenotipado | Crear `notebooks/02_fenotipado_kmeans.ipynb` con: carga de datos, elbow plot, silhouette por K, visualización de clusters, interpretación clínica de centros en español | Ejecutable de inicio a fin sin errores; ≥2 figuras generadas en `reportes/` | S3-002 |
 | S3-007 | Cerrar S2-09: persistir Parquet | Confirmar que `pipeline.py` ejecuta `persistir_procesado()` correctamente y genera `datos/procesados/dataset_procesado.parquet` | Archivo existe; `pd.read_parquet()` retorna DataFrame con columnas CDC; tamaño > 0 | S3-001 |
 | S3-008 | Cerrar S2-10: contraste regional | Completar `reportes/contraste_regional.md` con tabla CDC vs ENSANUT (≥7 variables), sesgo relativo por variable y recomendación de umbral para contexto mexicano | Tabla presente; sección de recomendaciones clínicas ≥150 palabras | S3-001 |
-| S3-009 | Muestra de validación 2000 registros | Ejecutar pipeline completo con 2000 registros estratificados; registrar resultados en `reportes/comparativa_2000_s3.md` | 4 modelos evaluados; ROC-AUC ≥ 0.70 en al menos 1 modelo; prevalencia de muestra = 0.139 ± 0.02 | S3-007 |
+| S3-009 | Muestra de validación 2000 registros | Ejecutar pipeline completo con 2000 registros estratificados; registrar resultados en un JSON crudo y un Markdown legible | 4 modelos evaluados; ROC-AUC ≥ 0.70 en al menos 1 modelo; prevalencia de muestra = 0.139 ± 0.02 | S3-007 |
 | S3-010 | Actualizar `evaluacion_academica.md` Sprint 3 | Completar todas las celdas `[PLACEHOLDER]` en secciones B e I1–I5; marcar I4 e I5 como completados con fecha real | Sin celdas `[FECHA]` o `[0-100]` vacías en secciones afectadas | S3-003, S3-005 |
 | DOC-001 | Docstrings módulos nuevos | Cada función pública en `fenotipado.py` y `optimizador.py` debe tener docstring en español con `Args`, `Returns` y referencia al ítem de rúbrica | `pydoc entrenamiento.fenotipado` muestra documentación legible sin conocer Python | S3-003, S3-005 |
 
@@ -249,7 +251,7 @@ pytest pruebas/ --cov=entrenamiento --cov-report=term-missing
 |----|--------|--------------------|-----------------------|-------------|
 | S4-001 | Agregar Streamlit al proyecto | Añadir `streamlit` a `pyproject.toml` en grupo `[project.optional-dependencies]` como `dashboard` | `pip install -e .[dashboard]` funciona; `streamlit --version` retorna ≥1.30 | Sprint 3 ✅ |
 | S4-002 | Estructura base del dashboard | Crear `dashboard/__init__.py` vacío y `dashboard/app.py` con sidebar de 3 vistas; cargar pipeline con `@st.cache_resource`; manejar modo degradado sin modelo | `streamlit run dashboard/app.py` levanta en puerto 8501 sin error; sidebar muestra 3 vistas | S4-001 |
-| S4-003 | Vista "Comparativa de Modelos" | Leer `reportes/comparativa_modelos.md` o JSON de métricas; mostrar tabla con `st.dataframe`; gráfica de barras de ROC-AUC por modelo | Vista renderiza tabla con 4 modelos y 7 métricas; gráfica visible; no requiere reentrenamiento | S4-002 |
+| S4-003 | Vista "Comparativa de Modelos" | Leer el JSON crudo o el Markdown legible de métricas; mostrar tabla con `st.dataframe`; gráfica de barras de ROC-AUC por modelo | Vista renderiza tabla con 4 modelos y 7 métricas; gráfica visible; no requiere reentrenamiento | S4-002 |
 | S4-004 | Vista "Predicción Individual" | Formulario con los 21 campos de `DatosPaciente`; llamar `PredictorDiabetes.predecir()` directamente (sin HTTP); mostrar categoría de riesgo, confianza y advertencia clínica | Formulario acepta todos los campos; resultado visible; maneja errores de validación clínica con mensaje en español | S4-002 |
 | S4-005 | Vista "Fenotipos K-Means" | Cargar modelo K-Means serializado; mostrar elbow plot, silhouette por K y tabla de centros de clusters con interpretación clínica en español | Vista renderiza ≥2 figuras y ≥1 tabla; interpretación clínica visible sin conocimientos de ML | S4-002, S3-002 |
 | S4-006 | Validación manual del dashboard | Ejecutar checklist: (a) comparativa carga tabla, (b) predicción retorna resultado, (c) fenotipos renderiza gráficas, (d) modo degradado no crashea | Checklist documentado en `docs/evaluacion_academica.md` sección I6 con fecha | S4-003, S4-004, S4-005 |
