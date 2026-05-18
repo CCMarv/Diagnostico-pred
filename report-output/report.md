@@ -1,6 +1,6 @@
 # Portada
 
-**Reporte técnico-académico del proyecto:** `CCMarv/Diasgnostico-pred`  
+**Reporte técnico-académico del proyecto:** `CCMarv/Diagnostico-pred (repo: CCMarv/Diasgnostico-pred)`  
 **Asignatura:** Procesamiento de Datos / Inteligencia Artificial  
 **Fecha de elaboración:** 2026-05-18  
 **Repositorio analizado:** `../` (raíz del proyecto local)
