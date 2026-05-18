@@ -1,0 +1,14 @@
+{
+  "modo": "clasificacion",
+  "timestamp_inicio": "20260518_084354",
+  "ruta_dataset": "/workspaces/Diasgnostico-pred/resultados/corrida_50k/muestra_50k.csv",
+  "ruta_modelo": "/workspaces/Diasgnostico-pred/resultados/corrida_50k/modelo_50k.joblib",
+  "ruta_reporte_crudo": "/workspaces/Diasgnostico-pred/resultados/corrida_50k/corrida_50k.json",
+  "ruta_reporte_legible": "/workspaces/Diasgnostico-pred/resultados/corrida_50k/corrida_50k.md",
+  "modelos_a_entrenar": [
+    "svm",
+    "arbol",
+    "gbm",
+    "mlp"
+  ]
+}

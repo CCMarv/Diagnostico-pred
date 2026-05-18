@@ -1,0 +1,100 @@
+{
+  "version": "modelo_diabetes_v20260518_084354.joblib",
+  "timestamp": "20260518_084354",
+  "n_muestras": 10000,
+  "use_knn": true,
+  "use_smote": true,
+  "semilla": 42,
+  "mejor_modelo": "svm",
+  "mejor_modelo_por_roc_auc": "svm",
+  "mejor_modelo_por_pr_auc": "svm",
+  "modelos": {
+    "svm": {
+      "nombre_modelo": "svm",
+      "roc_auc": 0.8350875289351852,
+      "pr_auc": 0.4213089998977339,
+      "sensibilidad": 0.7720588235294118,
+      "especificidad": 0.7384259259259259,
+      "f1_clase_positiva": 0.44967880085653106,
+      "brier_score": 0.16715822238629915,
+      "accuracy": 0.743,
+      "matriz_confusion": [
+        [
+          1276,
+          452
+        ],
+        [
+          62,
+          210
+        ]
+      ]
+    },
+    "arbol": {
+      "nombre_modelo": "arbol",
+      "roc_auc": 0.7985174972766884,
+      "pr_auc": 0.33039013619121893,
+      "sensibilidad": 0.4963235294117647,
+      "especificidad": 0.8784722222222222,
+      "f1_clase_positiva": 0.4376012965964344,
+      "brier_score": 0.13837633632003665,
+      "accuracy": 0.8265,
+      "matriz_confusion": [
+        [
+          1518,
+          210
+        ],
+        [
+          137,
+          135
+        ]
+      ]
+    },
+    "gbm": {
+      "nombre_modelo": "gbm",
+      "roc_auc": 0.8235613255718955,
+      "pr_auc": 0.3938533808941077,
+      "sensibilidad": 0.30514705882352944,
+      "especificidad": 0.9450231481481481,
+      "f1_clase_positiva": 0.3688888888888889,
+      "brier_score": 0.10076114995849378,
+      "accuracy": 0.858,
+      "matriz_confusion": [
+        [
+          1633,
+          95
+        ],
+        [
+          189,
+          83
+        ]
+      ]
+    },
+    "mlp": {
+      "nombre_modelo": "mlp",
+      "roc_auc": 0.7843711703431373,
+      "pr_auc": 0.32189056444469416,
+      "sensibilidad": 0.5551470588235294,
+      "especificidad": 0.828125,
+      "f1_clase_positiva": 0.41944444444444445,
+      "brier_score": 0.1560747620101727,
+      "accuracy": 0.791,
+      "matriz_confusion": [
+        [
+          1431,
+          297
+        ],
+        [
+          121,
+          151
+        ]
+      ]
+    }
+  },
+  "desbalance": {
+    "ratio": 6.352941176470588,
+    "pct_clase_0": 0.864,
+    "pct_clase_1": 0.136,
+    "recomendacion": "class_weight"
+  },
+  "ruta_modelo_versionado": "/workspaces/Diasgnostico-pred/resultados/corrida_10k/modelo_diabetes_v20260518_084354.joblib"
+}
