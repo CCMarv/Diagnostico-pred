@@ -16,9 +16,12 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
+import shutil
+
 from config import (
     MODELOS_SUPERVISADOS,
     PROPORCION_PRUEBA,
+    REPORTES_DIR,
     RUTA_DATASET_PREDETERMINADA,
     RUTA_MODELO_FINAL,
     RUTA_REPORTE_METRICAS,
@@ -88,6 +91,24 @@ def _extraer_probabilidad_clase_1(modelo, x) -> list[float]:
     return [float(valor) for valor in pred]
 
 
+def _tag_desde_n(n: int) -> str:
+    return f"{n // 1000}k"
+
+
+def _copiar_artefactos_a_corrida(dir_corrida: Path, nombre_mejor_modelo: str) -> None:
+    """Copia PNGs y parquet (rutas fijas) al directorio de la corrida."""
+    for patron in [f"curvas_{nombre_mejor_modelo}.png", f"calibracion_{nombre_mejor_modelo}.png"]:
+        src = REPORTES_DIR / patron
+        if src.exists():
+            dst = dir_corrida / patron
+            if src.resolve() != dst.resolve():
+                shutil.copy2(src, dst)
+    if RUTA_DATASET_PROCESADO.exists():
+        dst = dir_corrida / "dataset_procesado.parquet"
+        if RUTA_DATASET_PROCESADO.resolve() != dst.resolve():
+            shutil.copy2(RUTA_DATASET_PROCESADO, dst)
+
+
 def _resolver_modelos_a_entrenar(modelos_cli: list[str] | None) -> list[str]:
     """Resuelve la lista final de modelos supervisados a entrenar."""
     if modelos_cli is None:
@@ -129,6 +150,7 @@ def _ejecutar_flujo_clasificacion(
     modelos_a_entrenar: list[str] | None,
     use_knn: bool = True,
     use_smote: bool = True,
+    dir_resultados: Path | None = None,
 ) -> dict[str, float | str | dict]:
     tiempo_inicio_total = time.perf_counter()
     tiempos: dict[str, float] = {}
@@ -168,6 +190,17 @@ def _ejecutar_flujo_clasificacion(
 
     x = df_limpio[list(COLUMNAS_CDC)].copy()
     y = df_limpio[COLUMNA_OBJETIVO].copy()
+
+    # Si se pidió organización automática, redirigir todas las rutas de salida
+    # a resultados/corrida_{tag}/ usando el n real (conocido solo aquí).
+    if dir_resultados is not None:
+        tag = _tag_desde_n(len(x))
+        dir_corrida = dir_resultados / f"corrida_{tag}"
+        dir_corrida.mkdir(parents=True, exist_ok=True)
+        ruta_modelo = dir_corrida / f"modelo_{tag}.joblib"
+        ruta_reporte = dir_corrida / f"corrida_{tag}.json"
+        ruta_reporte_legible = dir_corrida / f"corrida_{tag}.md"
+        _LOG.info("dir_resultados activo → artefactos en %s", dir_corrida)
 
     inicio_etapa = time.perf_counter()
     monitor.actualizar("Calculando desbalance de clases")
@@ -277,6 +310,9 @@ def _ejecutar_flujo_clasificacion(
     guardar_reporte_legible(reporte_legible, ruta_reporte_legible)
     _LOG.info("Modelo serializado en %s", ruta_modelo)
     _LOG.info("Reporte crudo: %s", ruta_reporte)
+    if dir_resultados is not None:
+        _copiar_artefactos_a_corrida(ruta_reporte.parent, mejor_resultado.nombre)
+        _LOG.info("Artefactos copiados a %s", ruta_reporte.parent)
     tiempos["generacion_artefactos"] = time.perf_counter() - inicio_etapa
     tiempos["total"] = time.perf_counter() - tiempo_inicio_total
     metricas["tiempos_segundos"] = tiempos
@@ -349,6 +385,7 @@ def ejecutar_pipeline(
     modelos_a_entrenar: list[str] | None = None,
     use_knn: bool = True,
     use_smote: bool = True,
+    dir_resultados: Path | None = None,
 ) -> dict[str, float | str | dict]:
     """
     Orquesta el flujo completo de entrenamiento.
@@ -394,6 +431,7 @@ def ejecutar_pipeline(
                 modelos_a_entrenar=modelos_a_entrenar,
                 use_knn=use_knn,
                 use_smote=use_smote,
+                dir_resultados=dir_resultados,
             )
         if modo == "clustering":
             return _ejecutar_flujo_clustering(
@@ -424,6 +462,12 @@ def construir_parser() -> argparse.ArgumentParser:
         default=None,
         help="Lista separada por comas de modelos supervisados (ej: gbm,mlp).",
     )
+    parser.add_argument(
+        "--dir-resultados",
+        type=Path,
+        default=None,
+        help="Si se indica, organiza todos los artefactos en <dir>/corrida_{n}k/ automáticamente.",
+    )
     return parser
 
 
@@ -447,6 +491,7 @@ def main() -> None:
         ruta_reporte_legible=args.salida_reporte_legible,
         n_clusters=args.clusters,
         modelos_a_entrenar=modelos,
+        dir_resultados=args.dir_resultados,
     )
 
 
