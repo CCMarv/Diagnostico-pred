@@ -1,5 +1,5 @@
 # Evaluación Académica del Proyecto Final
-<!-- Plantilla gestionada por AcademicoIA v3.1 — no editar manualmente secciones marcadas con [AUTO] -->
+<!-- Documento único de control de proyecto — reemplaza PLAN_CORRECIONES.md, ROADMAP.md y copilot-instructions.md -->
 
 **Última actualización:** 2026-05-18
 **Nivel estimado actual:** Básico completado → Intermedio parcial (sin dashboard)
@@ -63,7 +63,7 @@
 
 | Requisito | Evidencia en código | Archivo | Estado |
 |-----------|---------------------|---------|--------|
-| Sistema en producción — API funcional (FastAPI u otro) | `api/main.py` con endpoints `/salud` y `/predecir` funcionales; estado operativo/degradado consistente; 4 tests de integración pasando | api/main.py | 🟡 Esqueleto funcional — conexión con modelo serializado pendiente S6-001 |
+| Sistema en producción — API funcional (FastAPI u otro) | `api/main.py` con endpoints `/salud` y `/predecir` funcionales; estado operativo/degradado consistente; 4 tests de integración pasando | api/main.py | 🟡 Código completo — falta serializar modelo: `modelos/modelo_diabetes_v1.joblib` no existe; ejecutar pipeline para generarlo (S6-01) |
 | Comparativa con papers académicos documentada en reporte | No existe todavía; pendiente Sprint 6 (S6-005, S6-006) | reportes/reporte_final.md | ❌ pendiente S6 |
 
 **Veredicto Avanzado:** INCOMPLETO — faltantes: conexión API con modelo real (S6-001) y comparativa papers (S6-005/006)
@@ -85,7 +85,7 @@
 | Las funciones y clases tienen docstrings | Medio | ✅ | Docstrings en español en todas las clases y métodos públicos de `entrenamiento/` y `api/` |
 | Los módulos están organizados con responsabilidad única | Medio | ✅ | `cargador_datos`, `preprocesador`, `comparador_modelos`, `evaluador`, `fenotipado`, `optimizador`, `predictor` — cada módulo con una única responsabilidad |
 | Existe `requirements.txt` o `pyproject.toml` con dependencias | Bajo | ✅ | `pyproject.toml` con todas las dependencias incluida `imbalanced-learn>=0.12.0` (añadida Issue #13) |
-| Las pruebas unitarias cubren al menos el pipeline principal | Bajo | ✅ | 27 tests pasando: `test_api` (4), `test_cargador` (5), `test_comparador` (4), `test_fenotipado` (3), `test_optimizador` (2), `test_predictor` (2), `test_preprocesador` (4), `test_descargador_dataset` (3) |
+| Las pruebas unitarias cubren al menos el pipeline principal | Bajo | 🟡 | 27 tests en 8 archivos (`test_api` 4, `test_cargador` 5, `test_comparador` 4, `test_fenotipado` 3, `test_optimizador` 2, `test_predictor` 2, `test_preprocesador` 4, `test_descargador_dataset` 3); errores de colección detectados en entorno limpio — requiere `pip install -e .[dev]` antes de presentación |
 
 **Puntos fuertes:**
 - Separación clara de responsabilidades; cada módulo puede probarse de forma aislada
@@ -111,7 +111,7 @@
 | Se analiza el impacto del desbalance de clases si aplica | Medio | ✅ | `CargadorDatos.detectar_desbalance` cuantifica el ratio; SMOTE activo en entrenamiento; PR-AUC como métrica principal para clases desbalanceadas |
 | Se reportan intervalos de confianza o desviación estándar entre pliegues | Bajo | 🟡 | ROC-AUC por fold disponible en logs; no se calcula `std` explícitamente en el JSON de reporte |
 
-**Mejor modelo actual:** GBM con ROC-AUC=0.875 (muestra smoke 40 registros — resultados académicos definitivos pendientes muestra S3-009 de 2000 registros)
+**Benchmark disponibles:** `reportes/benchmark_5000.json`, `benchmark_10000.json`, `benchmark_50000.json` (superan el requisito de 2000 registros). El requisito S3-009 se considera cubierto; pendiente seleccionar muestra de 2000 estratificada como muestra canónica para el reporte final.
 
 **Puntos fuertes:**
 - 8 métricas calculadas automáticamente para cada modelo
@@ -216,24 +216,106 @@
 | Fecha | Cambio | Nivel anterior → nuevo | Responsable |
 |-------|--------|------------------------|-------------|
 | 2026-05-17 | Implementado `FenotipadoKMeans` con pruebas unitarias; implementado `OptimizadorHiperparametros` con pruebas; ejecución de la muestra mínima de estabilidad y pruebas pasadas. Suite de pruebas `pruebas/` ejecutada: 20 passed. | Básico → Básico (hacia Intermedio) | AcademicoIA |
-| 2026-05-18 | Completada auditoría de evidencia: issues #9 (API salud), #11 (loky), #13 (imbalanced-learn), #14 (test_comparador), #15 (KNNImputer+SMOTE activos), #16 (validación CSV + PR-AUC). Suite: 27 passed. Reemplazados todos los placeholders con estado real observado en código. | Básico → Básico completado (Intermedio parcial sin dashboard) | AcademicoIA |
+| 2026-05-18 | Completada auditoría de evidencia: issues #9–#43 cerrados. Suite: 27 tests en 8 archivos. Reemplazados todos los placeholders. | Básico → Básico completado (Intermedio parcial sin dashboard) | AcademicoIA |
+| 2026-05-18 | Unificación documental: eliminados `PLAN_CORRECIONES.md`, `ROADMAP.md`, `docs/copilot-instructions.md`, `.github/copilot-instructions.md`. Plan de sprints S3–S6 absorbido en Sección 6. Este documento es ahora la única referencia de control de proyecto. Detectados errores de colección en pytest (entorno limpio sin `pip install -e .[dev]`). Benchmarks 5k/10k/50k confirman cumplimiento del requisito de 2000 registros. | Sin cambio de nivel | CCMarv |
 
 ---
 
-## 6. Acciones correctivas pendientes
+## 6. Plan de acción por sprint
 
-> Lista priorizada de lo que falta para subir de nivel. Ordenada por impacto en rúbrica.
+> Este documento reemplaza `ROADMAP.md` y `PLAN_CORRECIONES.md` (eliminados 2026-05-18).
+> Secuencia obligatoria: S3 → S4 → S5 → S6. No iniciar un sprint si el anterior tiene ítems de nivel incompletos.
+>
+> **Calificación proyectada:** Sprint 4 completo → ~76.6 base | Sprint 6 completo → ~106.6
+
+---
 
 ### Bloqueantes para Nivel Básico
 - Ninguno — Nivel Básico COMPLETADO ✅
 
-### Bloqueantes para Nivel Intermedio (+15)
-- [ ] **Dashboard interactivo (I6)** — crear `dashboard/app.py` con Streamlit; ejecutar con `streamlit run dashboard/app.py` → Sprint 4 (S4-001 a S4-006)
-- [ ] **Muestra académica 2000 registros** — ejecutar pipeline con 2000 registros estratificados y ROC-AUC ≥ 0.70 → S3-009
+---
 
-### Bloqueantes para Nivel Avanzado (+30)
-- [ ] **API conectada con modelo real** — S6-001: verificar que `lifespan` carga `modelo_diabetes_v1.joblib` y `predictor.esta_listo()` = True
-- [ ] **Comparativa con papers** — S6-005/006: tabla comparativa en `reportes/reporte_final.md` con ≥ 2 papers
+### Sprint 3 — Cierre de K-Means y pendientes de S2 *(en progreso)*
+**Impacto:** completa I4, I5, enriquece Resultados 30% y Reporte 20%
+
+| ID | Tarea | Archivo | Estado |
+|----|-------|---------|--------|
+| S3-01 | Contrato uniforme de métricas en 4 modelos | `pruebas/test_comparador.py` | ✅ 2026-05-18 |
+| S3-02 | K-Means con `k-means++`, codo, silhouette | `entrenamiento/fenotipado.py` | ✅ |
+| S3-03 | Notebook de análisis de fenotipos K-Means | `notebooks/02_fenotipado_kmeans.ipynb` | ⬜ |
+| S3-04 | `GridSearchCV` + `StratifiedKFold` como módulo formal | `entrenamiento/optimizador.py` | ✅ |
+| S3-05 | Pruebas del fenotipador | `pruebas/test_fenotipado.py` | ✅ |
+| S3-06 | Verificar pruebas del optimizador (errores de colección) | `pruebas/test_optimizador.py` | 🟡 |
+| S3-07 | Parquet procesado sin columna objetivo | `datos/procesados/dataset_procesado.parquet` | ✅ |
+| S3-08 | Contraste regional documentado en reporte | `reportes/contraste_regional.md` | ⬜ |
+
+**Validación de cierre:**
+```bash
+pytest pruebas/test_fenotipado.py pruebas/test_optimizador.py -v
+pytest pruebas/ --tb=short   # 0 errores de colección
+```
+
+---
+
+### Sprint 4 — Dashboard interactivo *(bloqueante de +15 pts)*
+**Impacto:** desbloquea Nivel Intermedio (+15), mejora Presentación 10% y Código y Técnica
+
+| ID | Tarea | Archivo | Estado |
+|----|-------|---------|--------|
+| S4-01 | Añadir `streamlit` a `pyproject.toml` | `pyproject.toml` | ⬜ |
+| S4-02 | Vista: tabla comparativa de modelos interactiva | `dashboard/app.py` | ⬜ |
+| S4-03 | Vista: formulario de predicción individual | `dashboard/app.py` | ⬜ |
+| S4-04 | Vista: gráfica de clústeres K-Means | `dashboard/app.py` | ⬜ |
+| S4-05 | Dashboard carga el pipeline serializado (`modelo_diabetes_v1.joblib`) | `dashboard/app.py` | ⬜ |
+
+**Validación de cierre:**
+```bash
+streamlit run dashboard/app.py
+# Verificar: tabla de métricas carga, formulario devuelve resultado, gráfica K-Means se renderiza
+```
+
+**Veredicto Intermedio al cerrar S4:** I1 ✅ I2 ✅ I3 ✅ I4 ✅ I5 ✅ I6 ✅ → **+15 puntos extra**
+
+---
+
+### Sprint 5 — Reporte narrativo y artefactos de presentación
+**Impacto:** Reporte 20% (de ~35 → ~85) + Presentación 10% (de ~30 → ~80)
+
+| ID | Tarea | Archivo | Estado |
+|----|-------|---------|--------|
+| S5-01 | Reporte: introducción y planteamiento del problema | `reportes/reporte_final.md` | ⬜ |
+| S5-02 | Reporte: metodología (pipeline, modelos, decisiones técnicas) | `reportes/reporte_final.md` | ⬜ |
+| S5-03 | Reporte: resultados con curvas ROC, PR, matriz de confusión | `reportes/reporte_final.md` | ⬜ |
+| S5-04 | Reporte: conclusiones y limitaciones | `reportes/reporte_final.md` | ⬜ |
+| S5-05 | Guía de ejecución del demo | `README_demo.md` | ⬜ |
+| S5-06 | Preguntas y respuestas de defensa oral | `docs/preguntas_defensa.md` | ⬜ |
+| S5-07 | Verificación final: pipeline + dashboard + pruebas sin errores | — | ⬜ |
+
+> Nota operativa: el reporte se genera ejecutando el pipeline para obtener el JSON crudo y luego `scripts/generar_reporte_legible.py` para el Markdown. No editar `reporte_final.md` a mano.
+
+**Calificación estimada al cerrar S5:** Reporte 35→85 (+10 pts ponderados) + Presentación 30→80 (+5 pts) → **base ~76.6**
+
+---
+
+### Sprint 6 — API en producción y comparativa con papers *(bloqueante de +30 pts)*
+**Impacto:** desbloquea Nivel Avanzado (+30), completa A1 y A2
+
+| ID | Tarea | Archivo | Estado |
+|----|-------|---------|--------|
+| S6-01 | Serializar modelo entrenando pipeline completo | `modelos/modelo_diabetes_v1.joblib` | ⬜ |
+| S6-02 | Verificar que `POST /predecir` responde con modelo real cargado | `api/main.py` | ⬜ |
+| S6-03 | Documentar arranque de la API en `README_demo.md` | `README_demo.md` | ⬜ |
+| S6-04 | Identificar ≥ 2 papers de predicción de diabetes con ML | — | ⬜ |
+| S6-05 | Tabla comparativa métricas proyecto vs. papers en reporte | `reportes/reporte_final.md` | ⬜ |
+
+**Validación de cierre:**
+```bash
+uvicorn api.main:app --reload
+curl http://localhost:8000/salud   # esperado: {"estado": "operativo"}
+pytest pruebas/test_api.py -v      # 4 tests pasando
+```
+
+**Veredicto Avanzado al cerrar S6:** A1 ✅ A2 ✅ → **+30 puntos extra** → calificación proyectada **~106.6**
 
 ---
 
