@@ -2,7 +2,7 @@
 <!-- Documento único de control de proyecto — reemplaza PLAN_CORRECIONES.md, ROADMAP.md y copilot-instructions.md -->
 
 **Última actualización:** 2026-05-18
-**Nivel estimado actual:** Intermedio COMPLETADO (+15 pts desbloqueados)
+**Nivel estimado actual:** Intermedio COMPLETADO (+15 pts) — Sprint 5 COMPLETADO
 **Puntos extra acumulados:** +15 (Dashboard I6 completado Sprint 4)
 
 ---
@@ -14,13 +14,13 @@
 
 | Componente | Peso | Calificación estimada (0-100) | Ponderado | Observaciones |
 |------------|------|-------------------------------|-----------|---------------|
-| **Código y Técnica** | 40% | 78 | 31.2 | Pipeline completo, 4 modelos, KNNImputer + SMOTE activos, 27 tests pasando, type hints en todos los módulos; falta dashboard |
-| **Resultados** | 30% | 68 | 20.4 | 8 métricas por modelo (ROC-AUC, PR-AUC, F1, sensibilidad, especificidad, Brier, accuracy, matriz); falta interpretación cualitativa y muestra académica 2000 registros |
-| **Reporte** | 20% | 35 | 7.0 | Solo reportes automáticos generados por el pipeline; reportes/reporte_final.md pendiente Sprint 5 |
-| **Presentación** | 10% | 30 | 3.0 | Documentación técnica existe; falta README_demo.md, preguntas_defensa.md y demo funcional |
-| **TOTAL BASE** | 100% | — | **61.6** | |
+| **Código y Técnica** | 40% | 80 | 32.0 | Pipeline completo, 4 modelos, KNNImputer + SMOTE, 27 tests, type hints, dashboard, logs tabulares, --dir-resultados ✅ |
+| **Resultados** | 30% | 82 | 24.6 | 8 métricas por modelo, corridas 10k y 50k documentadas, fenotipos K-Means, contraste CDC vs ENSANUT ✅ |
+| **Reporte** | 20% | 80 | 16.0 | reportes/reporte_final.md completo con intro clínica, metodología, resultados, conclusiones, comparativa papers ✅ |
+| **Presentación** | 10% | 80 | 8.0 | README_demo.md con comandos copiables, docs/preguntas_defensa.md con 33 preguntas ✅ |
+| **TOTAL BASE** | 100% | — | **80.6** | |
 | **Puntos extra (nivel)** | — | — | **+15** | Nivel Intermedio desbloqueado con Dashboard (Sprint 4) ✅ |
-| **CALIFICACIÓN FINAL** | — | — | **76.6** | Proyección tras Sprint 5: ~86.6; tras Sprint 6: ~106.6 |
+| **CALIFICACIÓN FINAL** | — | — | **95.6** | Proyección tras Sprint 6 (API+modelo real): ~106.6 |
 
 ---
 
@@ -129,20 +129,17 @@
 
 | Criterio | Peso dentro del componente | Estado | Notas |
 |----------|---------------------------|--------|-------|
-| El reporte tiene estructura clara (intro, metodología, resultados, conclusión) | Alto | ❌ | `reportes/reporte_final.md` no existe todavía; pendiente Sprint 5 (S5-001 a S5-004) |
-| Los hallazgos principales se presentan con visualizaciones | Alto | 🟡 | Curvas ROC, PR y calibración generadas automáticamente en `reportes/`; aún no integradas en un reporte narrativo |
-| La metodología explica por qué se eligió cada técnica del temario | Medio | ❌ | Pendiente S5-002 |
-| Las conclusiones responden la pregunta del proyecto | Medio | ❌ | Pendiente S5-004 |
-| El lenguaje es técnicamente preciso y consistente | Bajo | ❌ | Pendiente revisión al redactar S5-001 a S5-004 |
+| El reporte tiene estructura clara (intro, metodología, resultados, conclusión) | Alto | ✅ | `reportes/reporte_final.md` generado Sprint 5 — secciones: intro clínica, metodología, resultados, conclusiones |
+| Los hallazgos principales se presentan con visualizaciones | Alto | ✅ | Curvas ROC, PR y calibración referenciadas en reporte; fenotipos K-Means y contraste CDC/ENSANUT tabulados |
+| La metodología explica por qué se eligió cada técnica del temario | Medio | ✅ | Sección 2 del reporte explica decisiones de diseño para cada modelo y técnica de preprocesamiento |
+| Las conclusiones responden la pregunta del proyecto | Medio | ✅ | Sección 4 con hallazgos principales, limitaciones y trabajo futuro |
+| El lenguaje es técnicamente preciso y consistente | Bajo | ✅ | Reporte redactado con terminología clínica y de ML coherente con el temario |
 
-**Ruta del reporte principal:** `reportes/reporte_final.md` (pendiente Sprint 5)
+**Ruta del reporte principal:** `reportes/reporte_final.md` ✅ Sprint 5 completado 2026-05-18
 
 **Puntos fuertes:**
-- Reportes automáticos en `reportes/metricas_sprint1.json` y `.md` generados por el pipeline
-- Visualizaciones de curvas ROC, PR y calibración disponibles
-
-**Áreas de mejora:**
-- Falta el reporte académico narrativo completo (el más importante para este componente)
+- Reporte narrativo completo con contexto clínico y comparativa con papers (Priya 2021, Kopitar 2020)
+- Corridas 10k y 50k documentadas con artefactos reproducibles en `resultados/`
 
 ---
 
@@ -152,18 +149,15 @@
 
 | Criterio | Peso dentro del componente | Estado | Notas |
 |----------|---------------------------|--------|-------|
-| Hay una demo funcional (dashboard, notebook ejecutado o API) | Alto | ✅ | `streamlit run dashboard/app.py` — 3 vistas navegables; tabla de métricas, formulario CDC, fenotipos K-Means; API documentada pendiente S5-005 |
-| El equipo puede explicar las decisiones técnicas con claridad | Alto | ✅ | Documentación técnica detallada en `docs/implementacion_modelos/` con justificación de cada modelo |
-| Se preparan respuestas para preguntas típicas del temario | Medio | ❌ | `docs/preguntas_defensa.md` no existe; pendiente S5-006 |
+| Hay una demo funcional (dashboard, notebook ejecutado o API) | Alto | ✅ | `streamlit run dashboard/app.py` — 3 vistas navegables; `README_demo.md` con comandos copiables Sprint 5 ✅ |
+| El equipo puede explicar las decisiones técnicas con claridad | Alto | ✅ | `docs/preguntas_defensa.md` — 33 preguntas con respuestas completas por tema ✅ |
+| Se preparan respuestas para preguntas típicas del temario | Medio | ✅ | `docs/preguntas_defensa.md` cubre los 11 temas de la rúbrica, 3 preguntas por tema ✅ |
 
-**Artefacto de demo:** `streamlit run dashboard/app.py` ✅ (Sprint 4) — `uvicorn api.main:app` pendiente Sprint 6
+**Artefacto de demo:** `streamlit run dashboard/app.py` ✅ (Sprint 4) — `uvicorn api.main:app` pendiente Sprint 6 (requiere modelo en `modelos/`)
 
 **Puntos fuertes:**
-- Documentación técnica detallada por modelo disponible para consulta en defensa
-
-**Áreas de mejora:**
-- Crear `README_demo.md` con comandos copiables (S5-005)
-- Preparar preguntas de defensa (S5-006)
+- `README_demo.md` con todos los comandos copiables y tabla de variables CDC
+- `docs/preguntas_defensa.md` con respuestas en contexto de este proyecto específico
 
 ---
 
