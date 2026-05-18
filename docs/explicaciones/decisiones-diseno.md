@@ -1,8 +1,12 @@
 ---
-Autor: Equipo diasgnostico-pred
-Fecha: 2026-05-17
-Versión: 0.1.0
-ID: DEC-20260517-001
+título: Decisiones de Diseño
+categoría: explicaciones
+audiencia: equipo técnico
+versión: 0.1.0
+última actualización: 2026-05-17
+autor: Equipo diasgnostico-pred
+estado: revisado
+id: DEC-20260517-001
 ---
 
 # Decisiones de Diseño (resumen ejecutivo)
@@ -30,6 +34,6 @@ ID: DEC-20260517-001
 
 ## Alcance excluido
 
-- Esta página no pretende contener código ejecutable ni pruebas automatizadas. Las pruebas y validaciones se mantienen en `pruebas/` y la ejecución por desarrolladores es manual según la checklist de `docs/DOCUMENTATION_GUIDELINES.md`.
+- Esta página no pretende contener código ejecutable ni pruebas automatizadas. Las pruebas y validaciones se mantienen en `pruebas/` y la ejecución por desarrolladores es manual según la checklist de `docs/guia-documentacion.md`.
 
 Referencias: PROYECTO.md, docs/ROADMAP.md, config.py

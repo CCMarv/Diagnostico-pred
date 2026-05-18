@@ -1,3 +1,13 @@
+---
+título: Guía unificada — catálogo de modelos
+categoría: referencia
+audiencia: equipo técnico
+versión: 1.0.0
+última actualización: 2026-05-18
+autor: Equipo diasgnostico-pred
+estado: revisado
+---
+
 # Guía Unificada: Catálogo de Modelos de Predicción de Diabetes
 
 Esta es la **referencia central única** para entender cómo todos los modelos en el proyecto siguen un flujo común. Cada modelo (SVM, Árbol, GBM, MLP, K-Means) se implementa bajo los mismos principios arquitectónicos.

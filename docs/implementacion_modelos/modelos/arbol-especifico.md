@@ -1,8 +1,18 @@
+---
+título: Árbol de decisión — detalles específicos
+categoría: referencia
+audiencia: equipo técnico
+versión: 1.0.0
+última actualización: 2026-05-18
+autor: Equipo diasgnostico-pred
+estado: revisado
+---
+
 # Árbol de Decisión: Características y parámetros específicos
 
 Esta guía complementa [GUIA_UNIFICADA.md](../GUIA_UNIFICADA.md). Lee primero la guía unificada para entender el flujo general (secciones 1-8), luego usa este documento para detalles específicos del Árbol.
 
-## 🎓 Para empezar: ¿qué hace este modelo en palabras simples?
+## Para empezar: ¿qué hace este modelo en palabras simples?
 
 ### A. Definición coloquial
 

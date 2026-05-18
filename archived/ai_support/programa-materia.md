@@ -1,3 +1,13 @@
+---
+título: Programa de la materia — Unidad y contenidos
+categoría: explicaciones
+audiencia: equipo técnico
+versión: 1.0.0
+última actualización: 2026-05-18
+autor: Equipo diasgnostico-pred
+estado: archivado
+---
+
 UNIDAD 1: El Pipeline de ML y Procesamiento de Datos Avanzado
 
 1.1. Ingeniería del Flujo de Trabajo:  
@@ -58,29 +68,4 @@ Evaluación del curso
 | Proyecto final | 30% |
 | Participación | 30% |
 
-Evaluación del proyecto final 
-
-| Componente | Peso | Criterios |
-| :---- | :---- | :---- |
-| **Código y Técnica** | 40% | Calidad del código, uso apropiado de técnicas, documentación |
-| **Resultados** | 30% | Performance del modelo, análisis de resultados, interpretación |
-| **Reporte** | 20% | Claridad, profundidad, presentación de hallazgos |
-| **Presentación** | 10% | Comunicación, manejo de preguntas, demostración |
-
-### Nivel Básico (Requisito mínimo)
-
-* Pipeline completo con 3 modelos  
-* Preprocessing básico  
-* Métricas de evaluación estándar
-
-### Nivel Intermedio (+15 puntos extra)
-
-* Todos los modelos del temario (SVM, Arboles de decisión, Redes neuronales y K-Means)  
-* Optimización de hiperparámetros  
-* Dashboard interactivo básico
-
-### Nivel Avanzado (+30 puntos extra) 
-
-* Sistema en producción (API)  
-* Comparativa con papers académicos
-
+... (contenido original)

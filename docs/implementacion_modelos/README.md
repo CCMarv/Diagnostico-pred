@@ -1,8 +1,18 @@
+---
+título: Catálogo de modelos — índice
+categoría: referencia
+audiencia: equipo técnico
+versión: 1.0.0
+última actualización: 2026-05-18
+autor: Equipo diasgnostico-pred
+estado: revisado
+---
+
 # Catálogo de Modelos: Guía Unificada y Específicas
 
 Esta carpeta contiene la documentación de todos los modelos de predicción de diabetes del proyecto. Está organizada en **dos niveles**:
 
-## 🎯 Punto de entrada: Flujo común
+## Punto de entrada: Flujo común
 
 **[GUIA_UNIFICADA.md](GUIA_UNIFICADA.md)** ← **EMPIEZA AQUÍ**
 
@@ -18,7 +28,7 @@ Esta es la referencia central única. Documenta:
 
 ---
 
-## 📋 Guías específicas por modelo
+## Guías específicas por modelo
 
 Una vez entiendas el flujo común, consulta la guía específica de cada modelo para parámetros, justificaciones y características únicas:
 
@@ -32,7 +42,7 @@ Una vez entiendas el flujo común, consulta la guía específica de cada modelo 
 
 ---
 
-## 📚 Materiales de referencia
+## Materiales de referencia
 
 Los contenidos teóricos históricos han sido integrados como resúmenes embebidos en **[GUIA_UNIFICADA.md](GUIA_UNIFICADA.md)**. Puedes consultar allí las reglas prácticas sobre escalado, manejo del desbalance e intuiciones de modelos (SVM, redes, etc.).
 
@@ -44,7 +54,7 @@ Los contenidos teóricos históricos han sido integrados como resúmenes embebid
 
 ---
 
-## 🚀 Cómo usar esta documentación
+## Cómo usar esta documentación
 
 ### Caso 1: Entender la arquitectura completa
 1. Lee [GUIA_UNIFICADA.md](GUIA_UNIFICADA.md) (secciones 1-8)
@@ -62,7 +72,7 @@ Los contenidos teóricos históricos han sido integrados como resúmenes embebid
 
 ---
 
-## 🔄 Flujo de modelos en el proyecto
+## Flujo de modelos en el proyecto
 
 Independientemente del modelo, todos siguen este flujo:
 
@@ -86,7 +96,7 @@ Independientemente del modelo, todos siguen este flujo:
 
 ---
 
-## 📊 Comparación rápida de modelos
+## Comparación rápida de modelos
 
 | Característica | SVM | Árbol | GBM | MLP | K-Means |
 |---|---|---|---|---|---|
@@ -99,7 +109,7 @@ Independientemente del modelo, todos siguen este flujo:
 
 ---
 
-## 🔗 Referencias del proyecto
+## Referencias del proyecto
 
 Archivos relacionados fuera de esta carpeta:
 
@@ -112,7 +122,7 @@ Archivos relacionados fuera de esta carpeta:
 
 ---
 
-## 📝 Estructura de carpetas
+## Estructura de carpetas
 
 ```
 docs/implementacion_modelos/
@@ -129,7 +139,7 @@ docs/implementacion_modelos/
 
 ---
 
-## ✅ Checklist: Onboarding rápido
+## Checklist: Onboarding rápido
 
 - [ ] Leo [GUIA_UNIFICADA.md](GUIA_UNIFICADA.md) (5-10 min)
 - [ ] Entiendo los 8 pasos comunes
