@@ -87,8 +87,8 @@ Extras opcionales: `pip install -e .[dashboard]` para Streamlit, `pip install -e
 ## Instalación rápida
 
 ```bash
-git clone https://github.com/tu-usuario/diasgnostico-pred.git
-cd diasgnostico-pred
+git clone https://github.com/tu-usuario/diagnostico-pred.git
+cd diagnostico-pred
 conda env create -f environment.yml
 conda activate diagnostico-pred
 ```
