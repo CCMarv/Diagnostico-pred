@@ -1,4 +1,4 @@
-# diasgnostico-pred 
+# diagnostico-pred 
 
 Sistema modular de predicción de riesgo de diabetes tipo 2 mediante API REST. Entrena y despliega modelos de machine learning supervisado sobre el dataset CDC BRFSS 2015, con contextualización epidemiológica para población mexicana (IMSS / ENSANUT 2022).
 
@@ -8,7 +8,7 @@ Sistema modular de predicción de riesgo de diabetes tipo 2 mediante API REST. E
 
 ## Descripción del proyecto
 
-`diasgnostico-pred` es una herramienta de modelado predictivo y despliegue de API orientada a estimar el riesgo individual de diabetes tipo 2 a partir de 21 indicadores de salud del estudio CDC BRFSS 2015.
+`diagnostico-pred` es una herramienta de modelado predictivo y despliegue de API orientada a estimar el riesgo individual de diabetes tipo 2 a partir de 21 indicadores de salud del estudio CDC BRFSS 2015.
 
 El sistema recibe como entrada un perfil de salud del paciente (condiciones crónicas, hábitos, datos sociodemográficos) y produce como salida una probabilidad continua y una categoría de riesgo (`bajo`, `medio`, `alto`) con advertencia clínica cuando el resultado cae en zona de incertidumbre.
 
